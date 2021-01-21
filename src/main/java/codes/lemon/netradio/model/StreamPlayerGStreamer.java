@@ -5,9 +5,22 @@ import org.freedesktop.gstreamer.elements.PlayBin;
 
 import java.beans.PropertyChangeListener;
 
+/**
+ * An implementation of StreamPlayer using GStreamer as a back end
+ * for audio decoding and playback.
+ * This class makes use of GStreamers ability to build custom pipelines
+ * on the fly with the required decoders to support playback of the current
+ * audio source. This implementation is therefor able to handle any
+ * stream types supported by GStreamer.
+ * This implementation supports playback of one audio source at a time.
+ * The volume level of the audio playback can be adjusted.
+ * Clients can subscribe to be notified when stream tags arrive. Stream tags
+ * contain details about streams current state, including the title of the
+ * currently playing song.
+ */
 public class StreamPlayerGStreamer implements StreamPlayer{
-    public static final double MAX_VOLUME = 1.0;
-    public static final double MIN_VOLUME = 0.0;
+    //public static final double MAX_VOLUME = 1.0;
+    //public static final double MIN_VOLUME = 0.0;
     private Element pipeline;
     private double volume = MAX_VOLUME;
 
@@ -19,6 +32,16 @@ public class StreamPlayerGStreamer implements StreamPlayer{
         }
     }
 
+    /**
+     * Accepts a URI pointing to an audio source. This URI will be used
+     * as the source of audio for playback immediately.
+     * The audio source can be of any format supported by GStreamer.
+     * If a previous source is playing when this method is called, the
+     * previous source is stopped and playback resumes immediately using the new
+     * source. If nothing is playing when a source is set, playback will not start
+     * until `play()` is called by the client.
+     * @param uri uri pointing to an audio source
+     */
     @Override
     public void setSource(String uri) {
         assert(uri != null) : "null uri supplied";
@@ -44,6 +67,12 @@ public class StreamPlayerGStreamer implements StreamPlayer{
         System.out.println("source set to " + uri);
     }
 
+    /**
+     * Begins audio playback using the currently set source.
+     * If no source has been set, an IllegalStateException is thrown.
+     * If the currently set source is already playing, no action is taken
+     * since we are already in the desired state.
+     */
     @Override
     public void play() {
         if (pipeline == null) {
@@ -52,6 +81,12 @@ public class StreamPlayerGStreamer implements StreamPlayer{
         pipeline.play();
     }
 
+    /**
+     * Stops audio playback from the currently set source.
+     * If no source has been set, an IllegalStateException is thrown.
+     * If the currently set source is not playing at the time stop() is called,
+     * no action is taken since we are already in the desired state.
+     */
     @Override
     public void stop() {
         if (pipeline == null) {
@@ -83,6 +118,10 @@ public class StreamPlayerGStreamer implements StreamPlayer{
         }
     }
 
+    /**
+     * Subscribe to be notified when stream tags are updated.
+     * @param o observer
+     */
     @Override
     public void subscribeToStreamTags(PropertyChangeListener o) {
 

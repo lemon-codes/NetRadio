@@ -2,6 +2,9 @@ package codes.lemon.netradio.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Stores details of a radio station.
+ */
 class RadioStation implements Station{
     private final int id;
     private final String name;
@@ -115,5 +118,34 @@ class RadioStation implements Station{
     public void markPlayed() {
         lastPlayed = LocalDateTime.now();
         playCount++;
+    }
+
+    /**
+     * Compares RadioStation instances for equality based upon their unique ID.
+     * To ensure no two radio stations have the same ID, we base station equality
+     * on ID alone. If additional fields were included, two stations could exist
+     * with the same ID but different content, and would be considered unequal.
+     * In this use case, we consider both stations equal if their ID matches.
+     * @param o object to be compared with this
+     * @return true if `this` and `o` are equal, else false.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof RadioStation) {
+            RadioStation r = (RadioStation) o;
+            return this.id == r.id;
+        }
+        return false;
+    }
+
+    /**
+     * Returns a hash code value for the object.
+     * To ensure we don't violate the general contract between `hashCode()` and `equals()`
+     * the hashcode is now (like `equals()`) based soley on this instances unique ID.
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(this.id);
     }
 }
