@@ -1,18 +1,14 @@
 package codes.lemon.netradio.model;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 // TODO: Reconsider overiding of equals and hashcode to only use ID.
 //       Feels like a fragile way of doing things.
 
 public class NetRadioPlayer implements RadioPlayer{
-    //public static final int MIN_VOLUME = 0;
-    //public static final int MAX_VOLUME = 100;
+
     private final StreamPlayer playback = new StreamPlayerGStreamer();
-    private List<Station> stations = new LinkedList<>();  // TODO: consider alternatives, including sorted list
+    private final StationManager stations = new StationManager();
     private Station currentStation;
     private int currentID = 0; //TODO: replace with functioning ID generator
 
@@ -26,11 +22,14 @@ public class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public void setStation(int id) {
-        for (Station station : stations) {
-            if (station.getStationID() == id) {
-                playback.setSource(station.getURI());
-                currentStation = station;
-            }
+        Station s = stations.getStation(id);
+        if (s != null) {
+            playback.setSource(s.getURI());
+            currentStation = s;
+            currentStation.markPlayed();
+        }
+        else {
+            throw new IllegalArgumentException("invalid ID supplied");
         }
     }
 
@@ -88,28 +87,22 @@ public class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public List<Station> getAllStations() {
-        return stations;
+        return new LinkedList<Station>(stations.getAllStations());
     }
 
     /**
      * Add a station to the player. Requires a name for the station and a
      * URI pointing to an audio source for that station.
      *
-     * @param uri  points to an audio source for the new station
      * @param name the name of the new station
-     * @return true if the station was successfully added, else false.
+     * @param uri  points to an audio source for the new station
+     * @return the ID given to the newly added station
      */
     @Override
-    public boolean addStation(String uri, String name) {
+    public int addStation(String name, String uri) {
         uri = Objects.requireNonNull(uri);
         name = Objects.requireNonNull(name);
-        Station newStation = new RadioStation(currentID, name, uri);
-        if (stations.contains(newStation)) {
-            // station with this ID already exists
-            return false;
-        }
-        stations.add(newStation);
-        return true;
+        return stations.addStation(name, uri);
     }
 
     /**
@@ -120,15 +113,7 @@ public class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public boolean removeStation(int id) {
-        Iterator<Station> it = stations.iterator();
-        while (it.hasNext()) {
-            Station s = it.next();
-            if (s.getStationID() == id) {
-                it.remove();
-                return true;
-            }
-        }
-        return false;
+        return stations.removeStation(id);
     }
 
     /**
@@ -141,24 +126,21 @@ public class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public void setStationFavouriteStatus(int id, boolean status) {
-        Station s = getStation(id);
-        if (s != null) {
-            s.setFavourite(status);
-        }
-
+        stations.setFavourite(id, status);
     }
 
     /**
      * Searches through station details looking for the given search term.
+     * Searches are case insensitive.
      *
      * @param searchTerm the term to be searched
      * @return a list of all stations whose details contain an instance of the
-     * search term.
+     * search term. An empty list is returned if no results are found.
      */
     @Override
     public List<Station> findStation(String searchTerm) {
-        return null;
-        // TODO: Decide exactly which fields to include in search
+        searchTerm = Objects.requireNonNull(searchTerm);
+        return stations.findStation(searchTerm);
     }
 
     /**
@@ -170,11 +152,33 @@ public class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public Station getStation(int id) {
-        for (Station s : stations) {
-            if (s.getStationID() == id) {
-                return s;
-            }
+        return stations.getStation(id);
+    }
+
+
+    public static void main(String[] args) throws InterruptedException {
+        RadioPlayer radio = new NetRadioPlayer();
+        //radio.addStation("http://stream-al.planetradio.co.uk/clyde1.mp3", "Clyde1");
+        //radio.addStation("https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm", "freedesktop");
+
+
+        for (Station s : radio.getAllStations()) {
+            System.out.println(s.getStationName());
         }
-        return null;
+
+        int id = -1;
+        for (Station s : radio.findStation("clyde")) {
+            System.out.println(s.getStationName());
+            id = s.getStationID();
+        }
+        radio.setStation(id);
+        radio.play();
+        Thread.sleep(10000);
+        radio.setStationFavouriteStatus(id, true);
+        System.out.println(radio.getStation(id).getStationName() + " fav status: " + radio.getStation(id).isFavourite());
+        radio.setStation(1);
+        Thread.sleep(5000);
+        radio.setVolume(20);
+        Thread.sleep(5000);
     }
 }

@@ -18,7 +18,7 @@ import java.beans.PropertyChangeListener;
  * contain details about streams current state, including the title of the
  * currently playing song.
  */
-public class StreamPlayerGStreamer implements StreamPlayer{
+class StreamPlayerGStreamer implements StreamPlayer{
     //public static final double MAX_VOLUME = 1.0;
     //public static final double MIN_VOLUME = 0.0;
     private Element pipeline;

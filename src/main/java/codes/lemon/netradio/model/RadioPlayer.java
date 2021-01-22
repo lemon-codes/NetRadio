@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface RadioPlayer {
     public static final int MIN_VOLUME = 0;
-    public static final int MAX_VOLUME = 1;
+    public static final int MAX_VOLUME = 100;
 
     /**
      * Select the station to be played.
@@ -47,12 +47,14 @@ public interface RadioPlayer {
 
     /**
      * Add a station to the player. Requires a name for the station and a
-     * URI pointing to an audio source for that station.
-     * @param URI points to an audio source for the new station
+     * URI pointing to an audio source for that station. The station will be
+     * given a unique ID.
+     *
      * @param name the name of the new station
-     * @return true if the station was successfully added, else false.
+     * @param uri points to an audio source for the new station
+     * @return the ID assigned to the newly added station
      */
-    boolean addStation(String URI, String name);
+    int addStation(String name, String uri);
 
     /**
      * Permanently remove a station from the player.
