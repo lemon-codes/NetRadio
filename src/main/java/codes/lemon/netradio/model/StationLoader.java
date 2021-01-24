@@ -18,8 +18,9 @@ class StationLoader {
 
     /**
      * Retrieves previously stored Station instances.
-     * This method returns newly constructed Station instances,
-     * multiple calls to this method will not return the same instances.
+     * The Station instances returned are identical in value to those
+     * that were stored, though they are different instances.
+     * Multiple calls to this method will never return the same instances.
      * @return previously stored station instances, else an empty list.
      */
     public List<Station> getStations() {
@@ -48,7 +49,7 @@ class StationLoader {
      * Store station instances. The data contained in these instances will be
      * stored permanently and can be retrieved in future runs.
      * Station instances containing the same data can be retrieved by calling
-     * `getStations()`.
+     * `getStations()`. 
      * @param stations A list of station instances to be stored.
      */
     public void storeStations(List<Station> stations) {
