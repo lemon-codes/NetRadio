@@ -8,12 +8,11 @@ import java.util.*;
 public class NetRadioPlayer implements RadioPlayer{
 
     private final StreamPlayer playback = new StreamPlayerGStreamer();
-    private final StationManager stations = new StationManager();
+    private final StationManager stations = new StationManager();  // loads stations from last run
     private Station currentStation;
     private int currentID = 0; //TODO: replace with functioning ID generator
 
     public NetRadioPlayer() {
-        // fill stations
     }
 
     /**
@@ -87,7 +86,7 @@ public class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public List<Station> getAllStations() {
-        return new LinkedList<Station>(stations.getAllStations());
+        return stations.getAllStations();
     }
 
     /**
@@ -166,6 +165,7 @@ public class NetRadioPlayer implements RadioPlayer{
             System.out.println(s.getStationName());
         }
 
+
         int id = -1;
         for (Station s : radio.findStation("clyde")) {
             System.out.println(s.getStationName());
@@ -180,5 +180,6 @@ public class NetRadioPlayer implements RadioPlayer{
         Thread.sleep(5000);
         radio.setVolume(20);
         Thread.sleep(5000);
+
     }
 }

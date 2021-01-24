@@ -2,16 +2,28 @@ package codes.lemon.netradio.model;
 
 import java.util.*;
 
+// TODO: Generate unique IDs, write stations to disk whenever new station added
+//       or station removed.
 class StationManager {
     private final StationLoader storage = new StationLoader();
-    // Station IDs are mapped to Station instances for quick lookup by ID
+    // Station IDs are mapped to Station instances for efficient (T(O) = O(1)) station lookup
     private final Map<Integer,Station> stations;
-    private int currentID = 0; // TODO: replace with proper solution
+    private int currentID = 0;
 
     public StationManager() {
+        // retrieve any stations stored from previous runs.
+        // Generate mapping from ID to station for O(1) lookup.
         stations = mapIDToStation(storage.getStations());
     }
 
+    /**
+     * Accepts a list of stations and returns a Map with each stations
+     * ID as a key with the corresponding station instance as the value
+     * for that key. This enables efficient station lookup T(O)=O(1) rather than
+     * looping through every station T(O) = O(n).
+     * @param stationList list of stations
+     * @return mapping of station IDs -> station instances
+     */
     private Map<Integer, Station> mapIDToStation(List<Station> stationList) {
         Map<Integer, Station> stationMap = new HashMap<>();
         for (Station s : stationList) {
@@ -33,8 +45,12 @@ class StationManager {
         return null;
     }
 
-    public Collection<Station> getAllStations() {
-        return stations.values();
+    /**
+     * Return a list of all station instances.
+     * @return a list of all stations
+     */
+    public List<Station> getAllStations() {
+        return new LinkedList<Station>(stations.values());
     }
 
     /**

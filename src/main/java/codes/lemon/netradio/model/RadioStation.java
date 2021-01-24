@@ -1,6 +1,7 @@
 package codes.lemon.netradio.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Stores details of a radio station.
@@ -14,13 +15,27 @@ class RadioStation implements Station{
     private int bitrate = -1;
     private boolean favourite = false;
 
+    // TODO: Consider builder design pattern.
     public RadioStation(int id, String name, String uri) {
-        this.id = id;
-        this.name = name;
-        this.uri = uri;
-        assert (id > 0) : "negative ID supplied";
-        assert(name != null) : "null supplied in name";
-        assert(uri != null) : "null supplied in uri";
+        this(id, name, uri, null, 0, -1, false);
+    }
+
+    protected RadioStation(int id, String name, String uri, LocalDateTime lastPlayed,
+                           int playCount, int bitrate, boolean favourite) {
+        if (id >= 0) {
+            this.id = id;
+        } else {
+            throw new IllegalStateException("ID must be positive");
+        }
+
+        // fix if corrupted since these fields don't hold any significance to the stations identity
+        this.playCount = Math.max(playCount, 0);
+        this.bitrate = Math.max(bitrate, -1);
+
+        this.name = Objects.requireNonNull(name);
+        this.uri = Objects.requireNonNull(uri);
+        this.lastPlayed = lastPlayed;  // null accepted if never played before
+        this.favourite = favourite;
     }
 
     /**
