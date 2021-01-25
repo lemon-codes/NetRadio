@@ -87,7 +87,9 @@ class RadioStation implements Station{
      */
     @Override
     public LocalDateTime getDateLastPlayed() {
-        return lastPlayed;
+        // TODO: Fix openCSV parsing of LocalDateTime fields
+        return null;
+        //return lastPlayed;
     }
 
     /**

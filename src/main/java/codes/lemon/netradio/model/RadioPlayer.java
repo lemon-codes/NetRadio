@@ -89,4 +89,9 @@ public interface RadioPlayer {
 
     //void subscribe()
 
+    /**
+     * Finishes up and frees resources.
+     */
+    void shutdown();
+
 }

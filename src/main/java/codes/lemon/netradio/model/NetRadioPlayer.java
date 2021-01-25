@@ -10,7 +10,6 @@ public class NetRadioPlayer implements RadioPlayer{
     private final StreamPlayer playback = new StreamPlayerGStreamer();
     private final StationManager stations = new StationManager();  // loads stations from last run
     private Station currentStation;
-    private int currentID = 0; //TODO: replace with functioning ID generator
 
     public NetRadioPlayer() {
     }
@@ -154,6 +153,14 @@ public class NetRadioPlayer implements RadioPlayer{
         return stations.getStation(id);
     }
 
+    /**
+     * Finishes up and frees resources
+     */
+    public void shutdown() {
+        stop();
+        stations.shutdown();
+    }
+
 
     public static void main(String[] args) throws InterruptedException {
         RadioPlayer radio = new NetRadioPlayer();
@@ -180,6 +187,11 @@ public class NetRadioPlayer implements RadioPlayer{
         Thread.sleep(5000);
         radio.setVolume(20);
         Thread.sleep(5000);
+        radio.setVolume(100);
+        radio.addStation("test2", "http://test.test2");
+        Thread.sleep(5000);
+        radio.removeStation(5);
+        radio.shutdown();
 
     }
 }

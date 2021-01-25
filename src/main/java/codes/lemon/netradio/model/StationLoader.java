@@ -49,7 +49,7 @@ class StationLoader {
      * Store station instances. The data contained in these instances will be
      * stored permanently and can be retrieved in future runs.
      * Station instances containing the same data can be retrieved by calling
-     * `getStations()`. 
+     * `getStations()`.
      * @param stations A list of station instances to be stored.
      */
     public void storeStations(List<Station> stations) {

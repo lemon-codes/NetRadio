@@ -8,12 +8,13 @@ class StationManager {
     private final StationLoader storage = new StationLoader();
     // Station IDs are mapped to Station instances for efficient (T(O) = O(1)) station lookup
     private final Map<Integer,Station> stations;
-    private int currentID = 0;
+    private int currentID;
 
     public StationManager() {
         // retrieve any stations stored from previous runs.
         // Generate mapping from ID to station for O(1) lookup.
         stations = mapIDToStation(storage.getStations());
+        currentID = stations.size(); // uniqueness is checked before assignment.
     }
 
     /**
@@ -63,16 +64,18 @@ class StationManager {
      * @return the ID given to the newly added station
      */
     public int addStation(String name, String uri) {
-        // should never occur as StationManager is not public
+        // should never occur as NetRadioPlayer validates input
         assert(name != null) : "null station name supplied";
         assert(uri != null) : "null station uri supplied";
 
-        Station newStation = new RadioStation(currentID, name, uri);
-
+        int id = getUniqueID();
         // ID assignment is under our control so should always be unique
-        assert (!stations.containsKey(currentID)) : "ID is not unique";
-        stations.put(currentID, newStation);
-        return currentID++;
+        assert (!stations.containsKey(id)) : "ID is not unique";
+        Station newStation = new RadioStation(id, name, uri);
+
+        stations.put(id, newStation);
+        updateDataInStorage();
+        return id;
     }
 
     /**
@@ -84,7 +87,11 @@ class StationManager {
     public boolean removeStation(int id) {
         // remove() returns null if key doesn't exist
         Station removed = stations.remove(id);
-        return removed != null;
+        if (removed != null) {
+            updateDataInStorage();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -99,6 +106,7 @@ class StationManager {
         Station s = getStation(id);
         if (s != null) {
             s.setFavourite(status);
+            updateDataInStorage();
         }
     }
 
@@ -127,6 +135,34 @@ class StationManager {
             }
         }
         return results;
+    }
+
+    /**
+     * Writes any changes to storage and exits.
+     */
+    public void shutdown() {
+        updateDataInStorage();
+    }
+
+    /**
+     * Write any changes to stations to storage.
+     */
+    private void updateDataInStorage() {
+        storage.storeStations(getAllStations());
+    }
+
+    /**
+     * Increments currentID until we find a unique ID.
+     * TODO: find a more efficient solution
+     * @return a new unique channel ID
+     */
+    private int getUniqueID() {
+        // currentID is only used as a starting point
+        // initial value is not guaranteed to be correct.
+        while (stations.containsKey(currentID)) {
+            currentID++;
+        }
+        return currentID;
     }
 
 }
