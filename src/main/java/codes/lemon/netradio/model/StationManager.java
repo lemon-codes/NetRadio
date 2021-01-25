@@ -2,19 +2,15 @@ package codes.lemon.netradio.model;
 
 import java.util.*;
 
-// TODO: Generate unique IDs, write stations to disk whenever new station added
-//       or station removed.
 class StationManager {
     private final StationLoader storage = new StationLoader();
     // Station IDs are mapped to Station instances for efficient (T(O) = O(1)) station lookup
     private final Map<Integer,Station> stations;
-    private int currentID;
 
     public StationManager() {
         // retrieve any stations stored from previous runs.
         // Generate mapping from ID to station for O(1) lookup.
         stations = mapIDToStation(storage.getStations());
-        currentID = stations.size(); // uniqueness is checked before assignment.
     }
 
     /**
@@ -152,17 +148,20 @@ class StationManager {
     }
 
     /**
-     * Increments currentID until we find a unique ID.
+     * Returns a unique ID that is not currently in use.
      * TODO: find a more efficient solution
-     * @return a new unique channel ID
+     * @return a new unique station ID
      */
     private int getUniqueID() {
-        // currentID is only used as a starting point
-        // initial value is not guaranteed to be correct.
-        while (stations.containsKey(currentID)) {
-            currentID++;
+        int id = 0;
+        // find the lowest value not currently used
+        // containsKey() should be O(1) since we use Integers hashCode()
+        while (stations.containsKey(id)) {
+            id++;
         }
-        return currentID;
+
+        assert(id >= 0) : "Negative ID generated";
+        return id;
     }
 
 }
