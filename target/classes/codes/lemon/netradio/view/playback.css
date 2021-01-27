@@ -1,0 +1,6 @@
+.player {
+    -fx-background-color: lightgray;
+    -fx-vgap: 1;
+    -fx-hgap: 5;
+    -fx-padding: 7;
+}

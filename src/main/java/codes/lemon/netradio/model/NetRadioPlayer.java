@@ -5,7 +5,7 @@ import java.util.*;
 // TODO: Reconsider overiding of equals and hashcode to only use ID.
 //       Feels like a fragile way of doing things.
 
-public class NetRadioPlayer implements RadioPlayer{
+class NetRadioPlayer implements RadioPlayer{
 
     private final StreamPlayer playback = new StreamPlayerGStreamer();
     private final StationManager stations = new StationManager();  // loads stations from last run
