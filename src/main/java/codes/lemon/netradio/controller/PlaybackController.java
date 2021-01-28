@@ -2,6 +2,7 @@ package codes.lemon.netradio.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseDragEvent;
@@ -11,13 +12,21 @@ import javafx.scene.text.Text;
 import codes.lemon.netradio.model.RadioPlayer;
 import codes.lemon.netradio.model.InstanceFactory;
 
-public class PlaybackController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class PlaybackController implements Initializable {
     private final RadioPlayer radio = InstanceFactory.getInstance();
-    @FXML private Text status;
+
     @FXML private Slider slider;
     @FXML private Text volumeLevel;
     @FXML private Text stationName;
     @FXML private Text trackName;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 
     public void playPressed(ActionEvent actionEvent) {
         radio.play();
@@ -53,6 +62,7 @@ public class PlaybackController {
         volumeLevel.setText(""+ (int)slider.getValue());
         radio.setVolume((int)slider.getValue());
     }
+
 
 }
 

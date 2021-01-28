@@ -3,8 +3,9 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
-<?import javax.swing.table.TableColumn?>
+
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TableColumn?>
 <TabPane fx:controller="codes.lemon.netradio.controller.StationListController" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
          prefWidth="Infinity" prefHeight="Infinity" nodeOrientation="RIGHT_TO_LEFT">
     <tabs>
@@ -12,7 +13,13 @@
         <Tab text="Tab1" closable="false" >
         </Tab>
         <Tab text="Tab2" closable="false">
-            <Button text="button2" alignment="TOP_LEFT"/>
+            <TableView fx:id="defaultTableView" layoutX="35.0" layoutY="28.0" prefHeight="200.0" prefWidth="Infinity" maxWidth="Infinity" >
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="266.6" maxWidth="Infinity"/>
+                    <TableColumn fx:id="nameColumn" text="Station Name" prefWidth="266.6" maxWidth="Infinity"/>
+                    <TableColumn fx:id="uriColumn" text="URI" prefWidth="266.6" maxWidth="Infinity" />
+                </columns>
+            </TableView>
         </Tab>
 
     </tabs>
