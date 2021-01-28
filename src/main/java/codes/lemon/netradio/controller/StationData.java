@@ -37,4 +37,8 @@ public class StationData {
     public String getStationUri() {
         return stationUri;
     }
+
+    public int getStationIdAsInt() {
+        return Integer.parseInt(stationId);
+    }
 }

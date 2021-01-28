@@ -127,6 +127,16 @@ class StreamPlayerGStreamer implements StreamPlayer{
 
     }
 
+    /**
+     * Check if audio is currently being played by this.
+     *
+     * @return true if audio is playing, else false.
+     */
+    @Override
+    public boolean isPlaying() {
+        return pipeline.isPlaying();
+    }
+
 
     /**
      * Each pipeline has a bus which gstreamer uses to send messages.

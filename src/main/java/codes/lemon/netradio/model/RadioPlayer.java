@@ -87,6 +87,12 @@ public interface RadioPlayer {
      */
     Station getStation(int id);
 
+    /**
+     * Check if audio is currently being played by the radio player.
+     * @return true if audio is playing, else false.
+     */
+    boolean isPlaying();
+
     //void subscribe()
 
     /**

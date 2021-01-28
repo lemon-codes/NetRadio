@@ -37,5 +37,11 @@ interface StreamPlayer {
      * @param o observer
      */
     void subscribeToStreamTags(PropertyChangeListener o);
+
+    /**
+     * Check if audio is currently being played by this.
+     * @return true if audio is playing, else false.
+     */
+    boolean isPlaying();
     // void setEquiliser()
 }

@@ -154,6 +154,16 @@ class NetRadioPlayer implements RadioPlayer{
     }
 
     /**
+     * Check if audio is currently being played by the radio player.
+     *
+     * @return true if audio is playing, else false.
+     */
+    @Override
+    public boolean isPlaying() {
+        return true;
+    }
+
+    /**
      * Finishes up and frees resources
      */
     public void shutdown() {

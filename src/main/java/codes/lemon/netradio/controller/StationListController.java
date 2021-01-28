@@ -9,8 +9,11 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,6 +44,30 @@ public class StationListController implements Initializable {
             stationList.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
         }
         return stationList;
+    }
+
+    /**
+     * Handles mouse clicks when stations are clicked.
+     * If a single primary click no action is taken.
+     * A double primary click starts playback for the clicked station.
+     * TODO: A secondary click shows extended station details.
+     * @param mouseEvent a mouse click on a station
+     */
+    public void stationClicked(MouseEvent mouseEvent) {
+        List<StationData> stationList = defaultTableView.getItems();
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+            if (mouseEvent.getClickCount() == 2) {
+                System.out.println("double click on station");
+                List<TablePosition> rows = defaultTableView.getSelectionModel().getSelectedCells();
+                assert(rows.size() == 1) : "rows.size()>1. multiple rows cannot be clicked at once";
+                for (TablePosition row : rows) {
+                    int rowIndex = row.getRow();
+                    StationData clickedStation = stationList.get(rowIndex);
+                    radio.setStation(clickedStation.getStationIdAsInt());
+                    radio.play();
+                }
+            }
+        }
     }
 }
 
