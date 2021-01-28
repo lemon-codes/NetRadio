@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
@@ -17,6 +16,9 @@
                     <TableColumn fx:id="nameColumn" text="Station Name" prefWidth="266.6" maxWidth="Infinity"/>
                     <TableColumn fx:id="uriColumn" text="URI" prefWidth="266.6" maxWidth="Infinity" />
                 </columns>
+                <sortOrder>
+                    <fx:reference source="idColumn"/>
+                </sortOrder>
             </TableView>
         </Tab>
 
@@ -28,6 +30,5 @@
         <Tab text="Most Played" closable="false" >
 
         </Tab>
-<!-- 35, 28 -->
     </tabs>
 </TabPane>

@@ -15,9 +15,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import javax.print.attribute.standard.Media;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class StationListController implements Initializable {
@@ -27,6 +29,7 @@ public class StationListController implements Initializable {
     @FXML private TableColumn<StationData, String> uriColumn;
 
     private final RadioPlayer radio = InstanceFactory.getInstance();
+    private final Mediator playbackMediator = ControllerMediator.getInstance();
 
 
     @Override
@@ -36,6 +39,17 @@ public class StationListController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("stationName"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("stationUri"));
         defaultTableView.getItems().setAll(getBasicStationData());
+    }
+
+    /**
+     * Sets the playback mediator which enables this instance to communicate with
+     * the playback controller without a tight coupling.
+     * TODO: consider using static field instead and retrieve Mediator instance from implementation
+     * @param playbackMediator a mediator between this and a playback controller
+     *
+     */
+    public void setPlaybackMediator(Mediator playbackMediator) {
+        //this.playbackMediator = Objects.requireNonNull(playbackMediator);
     }
 
     private List<StationData> getBasicStationData() {
@@ -64,7 +78,7 @@ public class StationListController implements Initializable {
                     int rowIndex = row.getRow();
                     StationData clickedStation = stationList.get(rowIndex);
                     radio.setStation(clickedStation.getStationIdAsInt());
-                    radio.play();
+                    playbackMediator.initiatePlayback();
                 }
             }
         }

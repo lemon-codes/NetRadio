@@ -8,10 +8,10 @@
     <!-- <padding><Insets top="25" right="25" bottom="10" left="25"/></padding> -->
 
     <top>
-        <fx:include source="playback.fxml"/>
+        <fx:include source="playback.fxml" fx:id="playback"/>
     </top>
     <center>
-        <fx:include source="stationList.fxml"/>
+        <fx:include source="stationList.fxml" fx:id="stationList"/>
     </center>
 
 </BorderPane>

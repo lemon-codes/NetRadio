@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 public class PlaybackController implements Initializable {
     private final RadioPlayer radio = InstanceFactory.getInstance();
+    private final Mediator stationListMediator = ControllerMediator.getInstance();
 
     @FXML private Slider slider;
     @FXML private Text volumeLevel;
@@ -42,12 +43,12 @@ public class PlaybackController implements Initializable {
 
     public void nextChannel(ActionEvent actionEvent) {
         radio.setStation(0);
-        playPressed(null);
+        playPressed(new ActionEvent());
     }
 
     public void previousChannel(ActionEvent actionEvent) {
         radio.setStation(1);
-        playPressed(null);
+        playPressed(new ActionEvent());
     }
 
 
@@ -64,5 +65,8 @@ public class PlaybackController implements Initializable {
     }
 
 
+    public void play() {
+        this.playPressed(new ActionEvent());
+    }
 }
 
