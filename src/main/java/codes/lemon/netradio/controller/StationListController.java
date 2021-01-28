@@ -3,9 +3,7 @@ package codes.lemon.netradio.controller;
 import codes.lemon.netradio.model.InstanceFactory;
 import codes.lemon.netradio.model.RadioPlayer;
 import codes.lemon.netradio.model.Station;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -15,11 +13,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-import javax.print.attribute.standard.Media;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class StationListController implements Initializable {
@@ -34,7 +30,12 @@ public class StationListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // constructor parameters each refer to a field name in StationData
+        // ensure column width expands appropriately when table is resized
+        idColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.2));
+        nameColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.3));
+        uriColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.5));
+
+        // fill table. Constructor parameters each refer to a field name in StationData
         idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("stationId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("stationName"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("stationUri"));

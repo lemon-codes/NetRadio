@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TableView?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.TableColumn?>
 <TabPane fx:controller="codes.lemon.netradio.controller.StationListController" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
          prefWidth="Infinity" prefHeight="Infinity" nodeOrientation="LEFT_TO_RIGHT" tabDragPolicy="FIXED">

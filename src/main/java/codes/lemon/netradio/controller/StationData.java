@@ -1,8 +1,5 @@
 package codes.lemon.netradio.controller;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class StationData {
 /*
     private final StringProperty stationId = new SimpleStringProperty();

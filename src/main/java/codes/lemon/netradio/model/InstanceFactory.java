@@ -4,7 +4,7 @@ package codes.lemon.netradio.model;
 public final class InstanceFactory {
     private static final RadioPlayer INSTANCE = new NetRadioPlayer();
 
-    public static final RadioPlayer getInstance() {
+    public static RadioPlayer getInstance() {
         return INSTANCE;
     }
 }
