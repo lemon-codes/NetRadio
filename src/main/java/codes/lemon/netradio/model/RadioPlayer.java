@@ -26,12 +26,20 @@ public interface RadioPlayer {
     void stop();
 
     /**
-     * Sets the audio playback volume for the current stream stream
-     * and future streams. Volume must be between(inclusive) MIN_VOLUME
+     * Sets the audio playback volume for the current station
+     * and future stations. Volume must be between(inclusive) MIN_VOLUME
      * and MAX_VOLUME which at current is 0 and 100 respectively.
      * @param volumeLevel Audio playback volume. 0 <= volumeLevel <= 100
      */
     void setVolume(int volumeLevel);
+
+    /**
+     * Get the audio playback volume.
+     * Volume is between MIN_VOLUME and MAX_VOLUME which at current
+     * is 0 and 100 respectively.
+     * @return Audio playback volume. 0 <= volumeLevel <= 100
+     */
+    int getVolume();
 
     /**
      * Returns details of the current station as a Station instance.
@@ -92,8 +100,6 @@ public interface RadioPlayer {
      * @return true if audio is playing, else false.
      */
     boolean isPlaying();
-
-    //void subscribe()
 
     /**
      * Finishes up and frees resources.

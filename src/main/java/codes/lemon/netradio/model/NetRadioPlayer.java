@@ -10,8 +10,10 @@ class NetRadioPlayer implements RadioPlayer{
     private final StreamPlayer playback = new StreamPlayerGStreamer();
     private final StationManager stations = new StationManager();  // loads stations from last run
     private Station currentStation;
+    private int volume = RadioPlayer.MAX_VOLUME;
 
     public NetRadioPlayer() {
+        setVolume(RadioPlayer.MAX_VOLUME);
     }
 
     /**
@@ -65,7 +67,17 @@ class NetRadioPlayer implements RadioPlayer{
         }
         // StreamPlayer has a volume range of 0.0 to 1.0
         playback.setVolume(volumeLevel/100.0);
+        volume = volumeLevel;
+    }
 
+    /**
+     * Get the audio playback volume.
+     * Volume is between MIN_VOLUME and MAX_VOLUME which at current
+     * is 0 and 100 respectively.
+     * @return Audio playback volume. 0 <= volumeLevel <= 100
+     */
+    public int getVolume() {
+        return volume;
     }
 
     /**
@@ -160,7 +172,7 @@ class NetRadioPlayer implements RadioPlayer{
      */
     @Override
     public boolean isPlaying() {
-        return true;
+        return playback.isPlaying();
     }
 
     /**

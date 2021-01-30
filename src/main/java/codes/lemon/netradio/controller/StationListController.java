@@ -18,48 +18,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class StationListController implements Initializable {
+public class StationListController implements Initializable, ModelEventHandler {
     @FXML private TableView<StationData> defaultTableView;
     @FXML private TableColumn<StationData,String> idColumn;
     @FXML private TableColumn<StationData, String> nameColumn;
     @FXML private TableColumn<StationData, String> uriColumn;
 
-    private final RadioPlayer radio = InstanceFactory.getInstance();
-    private final Mediator playbackMediator = ControllerMediator.getInstance();
+    private final ModelAdapter model = ModelAdapterImpl.getInstance();
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // subscribe to be notified of changes to model state caused by other controllers
+        model.subscribeToModelEvents(this);
         // ensure column width expands appropriately when table is resized
         idColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.2));
         nameColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.3));
         uriColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.5));
 
         // fill table. Constructor parameters each refer to a field name in StationData
+        // TODO: move to helper method which accepts any List<StationData>.
         idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("stationId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("stationName"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("stationUri"));
         defaultTableView.getItems().setAll(getBasicStationData());
     }
 
-    /**
-     * Sets the playback mediator which enables this instance to communicate with
-     * the playback controller without a tight coupling.
-     * TODO: consider using static field instead and retrieve Mediator instance from implementation
-     * @param playbackMediator a mediator between this and a playback controller
-     *
-     */
-    public void setPlaybackMediator(Mediator playbackMediator) {
-        //this.playbackMediator = Objects.requireNonNull(playbackMediator);
-    }
-
     private List<StationData> getBasicStationData() {
         List<StationData> stationList = new ArrayList<>();
-        for (Station s : radio.getAllStations()) {
+        for (Station s : model.getAllStations()) {
             stationList.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
         }
         return stationList;
     }
+
 
     /**
      * Handles mouse clicks when stations are clicked.
@@ -72,17 +64,41 @@ public class StationListController implements Initializable {
         List<StationData> stationList = defaultTableView.getItems();
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             if (mouseEvent.getClickCount() == 2) {
-                System.out.println("double click on station");
                 List<TablePosition> rows = defaultTableView.getSelectionModel().getSelectedCells();
                 assert(rows.size() == 1) : "rows.size()>1. multiple rows cannot be clicked at once";
                 for (TablePosition row : rows) {
                     int rowIndex = row.getRow();
                     StationData clickedStation = stationList.get(rowIndex);
-                    radio.setStation(clickedStation.getStationIdAsInt());
-                    playbackMediator.initiatePlayback();
+                    model.setStation(clickedStation.getStationIdAsInt());
+                    model.play();
                 }
             }
         }
     }
+
+
+    /**
+     * TODO: handle events
+     * @param event
+     */
+    @Override
+    public void handleEvent(ModelAdapter.ModelEvent event) {
+        switch(event) {
+            case PLAYBACK_STARTED:
+            case PLAYBACK_STOPPED:
+            case STATION_CHANGED:  // TODO: make station selected on list?
+            case STATION_ADDED:  // TODO: update values in tables
+            case STATION_REMOVED:
+            case STATION_EDITED:
+            case SEARCH_RESULTS_READY:
+            case TAG_UPDATE:
+            case VOLUME_CHANGED:
+            case SHUTDOWN:
+                break;
+        }
+
+    }
+
+
 }
 

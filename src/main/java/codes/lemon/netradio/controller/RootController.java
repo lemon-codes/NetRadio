@@ -12,9 +12,5 @@ public class RootController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ControllerMediator mediator = ControllerMediator.getInstance();
-        mediator.setPlaybackController(playbackController);
-        mediator.setStationListController(stationListController);
-
     }
 }
