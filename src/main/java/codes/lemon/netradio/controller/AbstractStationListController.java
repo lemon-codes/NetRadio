@@ -1,7 +1,5 @@
 package codes.lemon.netradio.controller;
 
-import codes.lemon.netradio.model.InstanceFactory;
-import codes.lemon.netradio.model.RadioPlayer;
 import codes.lemon.netradio.model.Station;
 
 import javafx.fxml.FXML;
@@ -18,13 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class StationListController implements Initializable, ModelEventHandler {
-    @FXML private TableView<StationData> defaultTableView;
-    @FXML private TableColumn<StationData,String> idColumn;
-    @FXML private TableColumn<StationData, String> nameColumn;
-    @FXML private TableColumn<StationData, String> uriColumn;
+public abstract class AbstractStationListController implements Initializable, ModelEventHandler {
+    /* Any FXML views utilising this controller must fx:ids which match the following field names */
+    @FXML protected TableView<StationData> tableView;
+    @FXML protected TableColumn<StationData,String> idColumn;
+    @FXML protected TableColumn<StationData, String> nameColumn;
+    @FXML protected TableColumn<StationData, String> uriColumn;
 
-    private final ModelAdapter model = ModelAdapterImpl.getInstance();
+    protected final ModelAdapter model = ModelAdapterImpl.getInstance();
 
 
     @Override
@@ -32,26 +31,17 @@ public class StationListController implements Initializable, ModelEventHandler {
         // subscribe to be notified of changes to model state caused by other controllers
         model.subscribeToModelEvents(this);
         // ensure column width expands appropriately when table is resized
-        idColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.2));
-        nameColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.3));
-        uriColumn.prefWidthProperty().bind(defaultTableView.widthProperty().multiply(0.5));
+        idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.2));
+        nameColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.3));
+        uriColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
 
         // fill table. Constructor parameters each refer to a field name in StationData
         // TODO: move to helper method which accepts any List<StationData>.
         idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("stationId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("stationName"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("stationUri"));
-        defaultTableView.getItems().setAll(getBasicStationData());
+        tableView.getItems().setAll(getBasicStationData());
     }
-
-    private List<StationData> getBasicStationData() {
-        List<StationData> stationList = new ArrayList<>();
-        for (Station s : model.getAllStations()) {
-            stationList.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
-        }
-        return stationList;
-    }
-
 
     /**
      * Handles mouse clicks when stations are clicked.
@@ -61,10 +51,10 @@ public class StationListController implements Initializable, ModelEventHandler {
      * @param mouseEvent a mouse click on a station
      */
     public void stationClicked(MouseEvent mouseEvent) {
-        List<StationData> stationList = defaultTableView.getItems();
+        List<StationData> stationList = tableView.getItems();
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             if (mouseEvent.getClickCount() == 2) {
-                List<TablePosition> rows = defaultTableView.getSelectionModel().getSelectedCells();
+                List<TablePosition> rows = tableView.getSelectionModel().getSelectedCells();
                 assert(rows.size() == 1) : "rows.size()>1. multiple rows cannot be clicked at once";
                 for (TablePosition row : rows) {
                     int rowIndex = row.getRow();
@@ -96,8 +86,17 @@ public class StationListController implements Initializable, ModelEventHandler {
             case SHUTDOWN:
                 break;
         }
-
     }
+
+    private List<StationData> getBasicStationData() {
+        List<StationData> stationList = new ArrayList<>();
+        for (Station s : getStationsToDisplay()) {
+            stationList.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
+        }
+        return stationList;
+    }
+
+    protected abstract List<Station> getStationsToDisplay();
 
 
 }
