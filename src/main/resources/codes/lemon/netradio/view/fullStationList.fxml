@@ -6,7 +6,7 @@
 <!-- Default table view. A table with columns station ID, station name and the uri. -->
 <!-- The controller for this view fills the table with details of all stations stored in the model -->
 <TableView fx:id="tableView" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-           fx:controller="codes.lemon.netradio.controller.DefaultStationListController"
+           fx:controller="codes.lemon.netradio.controller.FullStationListController"
            prefHeight="200.0" prefWidth="Infinity" maxWidth="Infinity" onMouseClicked="#stationClicked">
     <columns>
         <TableColumn fx:id="idColumn" text="ID" prefWidth="266.6" maxWidth="Infinity" />

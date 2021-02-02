@@ -17,7 +17,7 @@
             <tabs>
                 <!-- Default tab that lists all stations -->
                 <Tab text="All" closable="false">
-                    <fx:include source="defaultStationList.fxml" fx:id="stationList"/>
+                    <fx:include source="fullStationList.fxml" fx:id="stationList"/>
                 </Tab>
 
                 <!-- Tab that lists only favourited stations -->

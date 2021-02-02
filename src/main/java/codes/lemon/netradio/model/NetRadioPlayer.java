@@ -26,7 +26,6 @@ class NetRadioPlayer implements RadioPlayer{
         if (s != null) {
             playback.setSource(s.getURI());
             currentStation = s;
-            currentStation.markPlayed();
         }
         else {
             throw new IllegalArgumentException("invalid ID supplied");
@@ -40,6 +39,7 @@ class NetRadioPlayer implements RadioPlayer{
     public void play() {
         if (currentStation != null) {
             playback.play();
+            currentStation.markPlayed();
         }
     }
 

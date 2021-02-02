@@ -4,7 +4,7 @@ import codes.lemon.netradio.model.Station;
 
 import java.util.List;
 
-public class DefaultStationListController extends AbstractStationListController{
+public class FullStationListController extends AbstractStationListController{
 
     @Override
     protected List<Station> getStationsToDisplay() {

@@ -7,10 +7,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class RootController implements Initializable {
-    @FXML private PlaybackController playbackController;
-    @FXML private DefaultStationListController stationListController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 }
