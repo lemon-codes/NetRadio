@@ -21,6 +21,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         model.subscribeToModelEvents(this);
+        updateVolumeDisplay();
     }
 
     public void playPressed(ActionEvent actionEvent) {
