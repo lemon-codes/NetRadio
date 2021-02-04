@@ -19,8 +19,8 @@ import java.beans.PropertyChangeListener;
  * currently playing song.
  */
 class StreamPlayerGStreamer implements StreamPlayer{
-    //public static final double MAX_VOLUME = 1.0;
-    //public static final double MIN_VOLUME = 0.0;
+
+    private ObservableMetadata tags = new ObservableMetadata();
     private Element pipeline;
     private double volume = MAX_VOLUME;
 
@@ -137,6 +137,20 @@ class StreamPlayerGStreamer implements StreamPlayer{
         return pipeline.isPlaying();
     }
 
+    /**
+     * Returns an ObservableMetadata instance which contains stream metadata properties.
+     * Clients can register a PropertyChangeListener with the ObservableMetadata
+     * instance to be notified when any property is updated.
+     * The ObservableMetadata class contains constants which a PropertyChangeListener
+     * can use to identify which property has changed.
+     *
+     * @return an ObservableTag instance which contains up to data stream metadata.
+     */
+    @Override
+    public ObservableMetadata getObservableMetadata() {
+        return tags;
+    }
+
 
     /**
      * Each pipeline has a bus which gstreamer uses to send messages.
@@ -155,56 +169,74 @@ class StreamPlayerGStreamer implements StreamPlayer{
             System.out.println("We have reached the end of the stream");
             // need pipeline.stop() to ensure window closes with video
             pipe.stop();  // sets the state to NULL
-            //pipeline.setState(State.NULL);
         });
-
-        /*
-        bus.connect(new Bus.EOS() {
-            @Override
-            public void endOfStream(GstObject gstObject) {
-                System.out.println("We have reached the end of the stream");
-                // need pipeline.stop() to ensure window closes with video
-                pipe.stop();  // sets the state to NULL
-                //pipeline.setState(State.NULL);
-            }
-        });
-        */
 
         bus.connect(new Bus.ERROR() {
 
             @Override
             public void errorMessage(GstObject source, int i, String s) {
-                System.out.println("LOLING Error: " + s + "\ti=" + i);
+                System.out.println("Error: " + s + "\ti=" + i);
             }
         });
 
+        // update the ObservabeTags instance with the latest tag properties as they arrive off the Bus.
         bus.connect(new Bus.TAG() {
 
             @Override
             public void tagsFound(GstObject source, TagList tagList) {
-                String title = null;
-                try {
-                    title = tagList.getString("title", 0);
-                }
-                catch (NullPointerException e) {
-                    // title not available at this time. already null
-
-                }
-                if (title == null) {
-                    System.out.println("Clyde 1");
-                }
-                else {
-                    System.out.println("Title:" + title);
-                }
-                for (String tag : tagList.getTagNames()) {
-                    int count = tagList.getValueCount(tag);
-                    for (int i=0; i<count; i++) {
-                        System.out.println("(" + tag + "," + i + "): " + tagList.getString(tag, i));
-
-                    }
-                }
-
+                updateTags(tagList);
             }
         });
+    }
+
+    /**
+     * Updates the current ObservableTag instance with the supplied tag properties.
+     * ObservableTag will update registered listeners.
+     * @param tagList a list of new tags
+     */
+    private void updateTags(TagList tagList) {
+        for (String key : tagList.getTagNames()) {
+            switch (key) {
+                case TagKeys.AUDIO_CODEC -> tags.setAudioCodec(tagList.getString(key, 0));
+                case TagKeys.BITRATE -> tags.setBitrate(tagList.getString(key, 0));
+                case TagKeys.CHANNEL_MODE -> tags.setChannelMode(tagList.getString(key, 0));
+                case TagKeys.CITY -> tags.setCity(tagList.getString(key, 0));
+                case TagKeys.CONTAINER_FORMAT -> tags.setContainerFormat(tagList.getString(key, 0));
+                case TagKeys.COUNTRY -> tags.setCountry(tagList.getString(key, 0));
+                case TagKeys.ENCODER -> tags.setEncoder(tagList.getString(key, 0));
+                case TagKeys.ENCODER_VERSION -> tags.setEncoderVersion(tagList.getString(key, 0));
+                case TagKeys.EXTENDED_COMMENT -> tags.setExtendedComment(tagList.getString(key, 0));
+                case TagKeys.GENRE -> tags.setGenre(tagList.getString(key, 0));
+                case TagKeys.HOMEPAGE -> tags.setHomepage(tagList.getString(key, 0));
+                case TagKeys.NOMINAL_BITRATE -> tags.setNominalBitrate(tagList.getString(key, 0));
+                case TagKeys.ORGANISATION -> tags.setOrganisation(tagList.getString(key, 0));
+                case TagKeys.TITLE -> tags.setTitle(tagList.getString(key, 0));
+                default -> System.out.println("INFO: Unhandled tag key -> " + key);
+            }
+        }
+    }
+
+    /**
+     * Utility class which contains string constants used as keys by GStreamer to identify tag values.
+     */
+    private static class TagKeys {
+        private static final String TITLE = "title"; // track title
+        private static final String GENRE = "genre"; // station genre
+        private static final String ORGANISATION = "organization"; // station name
+        private static final String EXTENDED_COMMENT = "extended-comment"; // server details
+        private static final String CHANNEL_MODE = "channel-mode"; // eg joint-stereo
+        //private static final String HAS_CRC = "has-crc";
+        private static final String HOMEPAGE = "homepage"; // station web page
+        private static final String AUDIO_CODEC = "audio-codec";
+        private static final String ENCODER = "encoder";
+        private static final String ENCODER_VERSION = "encoder_version";
+        private static final String NOMINAL_BITRATE = "nominal-bitrate";
+        private static final String BITRATE = "bitrate";
+        //private static final String MINIMUM_BITRATE = "minimum-bitrate";
+        //private static final String MAXIMUM_BITRATE = "maximum-bitrate";
+        private static final String CONTAINER_FORMAT = "container-format";
+        private static final String COUNTRY = "geo-location-country";
+        private static final String CITY = "geo-location-city";
+
     }
 }

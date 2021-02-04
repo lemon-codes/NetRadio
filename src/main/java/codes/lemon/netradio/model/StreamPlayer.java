@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 
 /**
  * A basic client for playing audio streams over the internet.
+ * Clients manually set the stream source. Clients can subscribe
+ * to stream metadata updates.
  */
 interface StreamPlayer {
     public static final double MIN_VOLUME = 0.0;
@@ -43,5 +45,16 @@ interface StreamPlayer {
      * @return true if audio is playing, else false.
      */
     boolean isPlaying();
+
+    /**
+     * Returns an ObservableMetadata instance which contains stream metadata properties.
+     * Clients can register a PropertyChangeListener with the ObservableMetadata
+     * instance to be notified when any property is updated.
+     * The ObservableMetadata class contains constants which a PropertyChangeListener
+     * can use to identify which property has changed.
+     * @return an ObservableTag instance which contains up to data stream metadata.
+     */
+    ObservableMetadata getObservableMetadata();
+
     // void setEquiliser()
 }

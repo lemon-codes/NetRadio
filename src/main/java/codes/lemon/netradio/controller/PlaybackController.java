@@ -7,8 +7,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.ResourceBundle;
+import codes.lemon.netradio.model.ObservableMetadata;
 
 public class PlaybackController implements Initializable, ModelEventHandler {
     private final ModelAdapter model = ModelAdapterImpl.getInstance();
@@ -21,7 +24,21 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         model.subscribeToModelEvents(this);
+        subscribeToTagUpdates();
         updateVolumeDisplay();
+    }
+
+    private void subscribeToTagUpdates() {
+        model.getObservableMetadata().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                String type = evt.getPropertyName();
+                switch (type) {
+                    case ObservableMetadata.PROP_TITLE -> trackName.setText((String)evt.getNewValue());
+                    // TODO: consider other cases
+                }
+            }
+        });
     }
 
     public void playPressed(ActionEvent actionEvent) {

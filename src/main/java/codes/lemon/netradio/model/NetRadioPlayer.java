@@ -176,6 +176,20 @@ class NetRadioPlayer implements RadioPlayer{
     }
 
     /**
+     * Returns an ObservableMetadata instance which contains stream metadata properties.
+     * Clients can register a PropertyChangeListener with the ObservableMetadata
+     * instance to be notified when any property is updated.
+     * The ObservableMetadata class contains constants which a PropertyChangeListener
+     * can use to identify which property has changed.
+     *
+     * @return an ObservableTag instance which contains up to data stream metadata.
+     */
+    @Override
+    public ObservableMetadata getObservableMetadata() {
+        return playback.getObservableMetadata();
+    }
+
+    /**
      * Finishes up and frees resources
      */
     public void shutdown() {

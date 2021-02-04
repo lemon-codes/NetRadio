@@ -1,6 +1,7 @@
 package codes.lemon.netradio.controller;
 
 import codes.lemon.netradio.model.InstanceFactory;
+import codes.lemon.netradio.model.ObservableMetadata;
 import codes.lemon.netradio.model.RadioPlayer;
 import codes.lemon.netradio.model.Station;
 
@@ -228,6 +229,20 @@ class ModelAdapterImpl implements ModelAdapter{
     @Override
     public boolean isPlaying() {
         return model.isPlaying();
+    }
+
+    /**
+     * Returns an ObservableMetadata instance which contains stream metadata properties.
+     * Clients can register a PropertyChangeListener with the ObservableMetadata
+     * instance to be notified when any property is updated.
+     * The ObservableMetadata class contains constants which a PropertyChangeListener
+     * can use to identify which property has changed.
+     *
+     * @return an ObservableTag instance which contains up to data stream metadata.
+     */
+    @Override
+    public ObservableMetadata getObservableMetadata() {
+        return model.getObservableMetadata();
     }
 
     /**
