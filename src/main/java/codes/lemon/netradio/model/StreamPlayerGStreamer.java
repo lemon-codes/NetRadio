@@ -158,7 +158,8 @@ class StreamPlayerGStreamer implements StreamPlayer{
      * and take appropriate action.
      * Messages may be informative, such as stream tags (title, bitrate, etc),
      * may indicate the end of the stream, or may indicate exceptions/errors
-     * within gstreamer
+     * within gstreamer.
+     * Tag messages are used to update the ObservableMetadata instances
      * @param pipe
      */
     private void connectBusListeners(Element pipe) {
