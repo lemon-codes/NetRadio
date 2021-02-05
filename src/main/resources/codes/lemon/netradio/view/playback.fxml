@@ -9,7 +9,7 @@
      GridPane that fills width, constant height, multiple columns, 2 rows -->
 <GridPane fx:controller="codes.lemon.netradio.controller.PlaybackController" xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="10" vgap="15" prefWidth="Infinity"
-          prefHeight="65.0" minWidth="400" minHeight="65.0" stylesheets="@playback.css" styleClass="player">
+          prefHeight="65.0" minWidth="400" minHeight="65.0" stylesheets="@playback.css" styleClass="playback-grid">
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
     <gridLinesVisible>false</gridLinesVisible>
     <!-- playback control buttons -->
@@ -24,7 +24,7 @@
 
     <!-- playback details (station & track name)-->
     <Text fx:id="stationName" text="" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="0"
-          GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" />
+          GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" styleClass="station-name-display"/>
     <Text fx:id="trackName" text="" textAlignment="CENTER" GridPane.columnIndex="4"
           GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"/>
 

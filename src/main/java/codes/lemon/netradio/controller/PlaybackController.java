@@ -79,7 +79,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
             case STATION_REMOVED -> {} // TODO: check if current station
             case STATION_EDITED -> {} // TODO: check if current station
             case SEARCH_RESULTS_READY ->{}
-            case TAG_UPDATE-> updateTrackNameDisplay();
+            case TAG_UPDATE-> resetTrackNameDisplay();
             case VOLUME_CHANGED -> updateVolumeDisplay();
             case SHUTDOWN -> {}
         }
@@ -100,7 +100,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      */
     private void updatePlaybackDisplay() {
         updateStationNameDisplay();
-        updateTrackNameDisplay();
+        resetTrackNameDisplay();
     }
 
 
@@ -121,14 +121,8 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      * Updates the track name text field in the display by requesting up to
      * date values from the model.
      */
-    // TODO: implement tag support in model. Update track name in real time
-    private void updateTrackNameDisplay() {
-        if (model.isPlaying()) {
-            trackName.setText("Bob The Builder: Yes we can yeee haaa");
-        }
-        else {
-            trackName.setText("");
-        }
+    private void resetTrackNameDisplay() {
+        trackName.setText("");
     }
 }
 
