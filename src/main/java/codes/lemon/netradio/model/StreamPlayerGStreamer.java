@@ -45,6 +45,7 @@ class StreamPlayerGStreamer implements StreamPlayer{
     @Override
     public void setSource(String uri) {
         assert(uri != null) : "null uri supplied";
+        tags.resetAllProperties();  // reset tags from previous source
 
         boolean resumePlay = false;
         if (pipeline != null && pipeline.isPlaying()) {
@@ -93,6 +94,7 @@ class StreamPlayerGStreamer implements StreamPlayer{
             throw new IllegalStateException("no stream selected for playback. Nothing to stop");
         }
         pipeline.stop();
+        tags.resetAllProperties();
 
     }
 
@@ -196,7 +198,9 @@ class StreamPlayerGStreamer implements StreamPlayer{
      * @param tagList a list of new tags
      */
     private void updateTags(TagList tagList) {
+        System.out.println("\n---------------------------------------------------");
         for (String key : tagList.getTagNames()) {
+            System.out.println(key + " : " + tagList.getString(key, 0));
             switch (key) {
                 case TagKeys.AUDIO_CODEC -> tags.setAudioCodec(tagList.getString(key, 0));
                 case TagKeys.BITRATE -> tags.setBitrate(tagList.getString(key, 0));

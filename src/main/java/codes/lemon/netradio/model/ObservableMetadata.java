@@ -235,4 +235,25 @@ public class ObservableMetadata implements java.io.Serializable {
         this.city = city;
         pcs.firePropertyChange(PROP_CITY, oldValue, city);
     }
+
+    /**
+     * Resets all properties to empty Strings.
+     * All PropertyChangeListeners are notified of the updates.
+     */
+    public void resetAllProperties() {
+        setAudioCodec("");
+        setBitrate("");
+        setCity("");
+        setChannelMode("");
+        setCountry("");
+        setContainerFormat("");
+        setEncoder("");
+        setEncoderVersion("");
+        setExtendedComment("");
+        setGenre("");
+        setHomepage("");
+        setNominalBitrate("");
+        setOrganisation("");
+        setTitle("");
+    }
 }

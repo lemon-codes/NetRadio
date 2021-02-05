@@ -72,14 +72,14 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {
         switch(event) {
-            case PLAYBACK_STARTED -> updatePlaybackDisplay();
+            case PLAYBACK_STARTED -> updateStationNameDisplay();
             case PLAYBACK_STOPPED -> updatePlaybackDisplay();
             case STATION_CHANGED -> updatePlaybackDisplay();
             case STATION_ADDED -> {} // nothing to update
             case STATION_REMOVED -> {} // TODO: check if current station
             case STATION_EDITED -> {} // TODO: check if current station
             case SEARCH_RESULTS_READY ->{}
-            case TAG_UPDATE-> resetTrackNameDisplay();
+            case TAG_UPDATE-> {}
             case VOLUME_CHANGED -> updateVolumeDisplay();
             case SHUTDOWN -> {}
         }
