@@ -3,8 +3,6 @@
 <?import javafx.scene.layout.*?>
 
 
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
 <BorderPane fx:controller="codes.lemon.netradio.controller.RootController" xmlns:fx="http://javafx.com/fxml"
             prefWidth="800" prefHeight="600" minWidth="400" minHeight="200">
     <!-- <padding><Insets top="25" right="25" bottom="10" left="25"/></padding> -->
@@ -13,23 +11,6 @@
         <fx:include source="playback.fxml" fx:id="playback"/>
     </top>
     <center>
-        <TabPane prefWidth="Infinity" prefHeight="Infinity" nodeOrientation="LEFT_TO_RIGHT" tabDragPolicy="FIXED">
-            <tabs>
-                <!-- Default tab that lists all stations -->
-                <Tab text="All" closable="false">
-                    <fx:include source="fullStationList.fxml" fx:id="stationList"/>
-                </Tab>
-
-                <!-- Tab that lists only favourited stations -->
-                <Tab text="Favourites" closable="false" >
-                    <fx:include source="favouriteStationList.fxml" fx:id="favouriteStationList"/>
-                </Tab>
-
-                <!-- Tab that lists the top 10 most played stations -->
-                <Tab text="Most Played" closable="false" >
-                    <fx:include source="mostPlayedStationList.fxml" fx:id="mostPlayedStationList"/>
-                </Tab>
-            </tabs>
-        </TabPane>
+        <fx:include source="stationExplorer.fxml" fx:id="stationExplorer"/>
     </center>
 </BorderPane>

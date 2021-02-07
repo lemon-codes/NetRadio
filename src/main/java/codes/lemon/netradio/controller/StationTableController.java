@@ -14,9 +14,10 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
-public abstract class AbstractStationListController implements Initializable, ModelEventHandler {
+public class StationTableController implements Initializable, ModelEventHandler {
     /* Any FXML views utilising this controller must fx:ids which match the following field names */
     @FXML protected TableView<StationData> tableView;
     @FXML protected TableColumn<StationData,String> idColumn;
@@ -40,7 +41,7 @@ public abstract class AbstractStationListController implements Initializable, Mo
         idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("stationId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("stationName"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("stationUri"));
-        tableView.getItems().setAll(getBasicStationData());
+        //tableView.getItems().setAll(getBasicStationData());
     }
 
     /**
@@ -88,16 +89,19 @@ public abstract class AbstractStationListController implements Initializable, Mo
         }
     }
 
-    private List<StationData> getBasicStationData() {
-        List<StationData> stationList = new ArrayList<>();
-        for (Station s : getStationsToDisplay()) {
-            stationList.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
-        }
-        return stationList;
+    public void setStationsOnDisplay(List<Station> stations) {
+        Objects.requireNonNull(stations);
+        List<StationData> tableEntries = stationToStationData(stations);
+        tableView.getItems().setAll(tableEntries);
     }
 
-    protected abstract List<Station> getStationsToDisplay();
-
-
+    private List<StationData> stationToStationData(List<Station> stations) {
+        assert(stations != null) : "stations cannot be null";
+        List<StationData> convertedStations = new ArrayList<>();
+        for (Station s : stations) {
+            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
+        }
+        return convertedStations;
+    }
 }
 

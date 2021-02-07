@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:controller="codes.lemon.netradio.controller.StationExplorerController" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" prefHeight="Infinity" prefWidth="Infinity">
+
+    <!-- Tabbed view, each tab contains a table populated with station data -->
+    <TabPane fx:id="stationTabs" nodeOrientation="LEFT_TO_RIGHT" tabDragPolicy="FIXED" AnchorPane.rightAnchor="0.0"
+             AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+
+        <!-- Default tab that lists all stations -->
+        <Tab text="All" closable="false">
+            <fx:include source="stationTable.fxml" fx:id="allStationsTable"/>
+        </Tab>
+
+        <!-- Tab that lists only favourited stations -->
+        <Tab text="Favourites" closable="false">
+            <fx:include source="stationTable.fxml" fx:id="favouriteStationsTable"/>
+        </Tab>
+
+        <!-- Tab that lists the top 10 most played stations -->
+        <Tab text="Most Played" closable="false">
+            <fx:include source="stationTable.fxml" fx:id="mostPlayedStationsTable"/>
+        </Tab>
+
+        <!-- Tab that shows search results to use searches -->
+        <Tab text="Search Results" closable="false" fx:id="searchResultTab">
+            <fx:include source="stationTable.fxml" fx:id="searchResultStationsTable"/>
+        </Tab>
+    </TabPane>
+
+    <!-- Search box and submission button -->
+    <HBox maxWidth="Infinity" minHeight="26" maxHeight="26" AnchorPane.topAnchor="4.0" AnchorPane.rightAnchor="2.0">
+        <Button text="Search" onAction="#searchStations"/>
+        <TextField fx:id="searchField" promptText="Search stations.." prefWidth="250"/>
+    </HBox>
+
+</AnchorPane>
