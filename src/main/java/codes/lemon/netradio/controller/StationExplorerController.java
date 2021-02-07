@@ -10,9 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Controller for a station explorer. Allows station details to be browsed and searched by users.
@@ -62,12 +60,27 @@ public class StationExplorerController implements Initializable, ModelEventHandl
 
     /**
      * Returns the 10 stations with the highest "played" count.
+     * Stations are ordered most played to least played.
      * @return top 10 most played stations
      */
     private List<Station> getMostPlayedStations() {
-        // TODO: design efficient algorithm to load the top 10 most played
-        return model.getAllStations();
+        // sort all stations by playCount
+        Comparator<Station> playCountComparator = Comparator.comparing(Station::getPlayCount);
+        SortedSet<Station> sortedStations = new TreeSet<>(playCountComparator);
+        for (Station s : model.getAllStations()) {
+            sortedStations.add(s);
+        }
+
+        // place top 10 (or less if stations.size < 10) most played in list to return
+        List<Station> mostPlayedStations = new ArrayList<>();
+        int stationCount = Math.min(sortedStations.size(), 10);
+        for (int i=0; i<stationCount; i++) {
+            mostPlayedStations.add(i, sortedStations.last());
+            sortedStations.remove(mostPlayedStations.get(i));
+        }
+        return mostPlayedStations;
     }
+    
 
     /**
      * Converts Station instances from the model to StationData instances.
