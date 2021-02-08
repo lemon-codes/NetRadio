@@ -2,6 +2,7 @@ package codes.lemon.netradio.controller;
 
 import codes.lemon.netradio.model.Station;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -52,18 +53,33 @@ public class StationTableController implements Initializable, ModelEventHandler 
      * @param mouseEvent a mouse click on a station
      */
     public void stationClicked(MouseEvent mouseEvent) {
-        List<StationData> stationList = tableView.getItems();
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             if (mouseEvent.getClickCount() == 2) {
-                List<TablePosition> rows = tableView.getSelectionModel().getSelectedCells();
-                assert(rows.size() == 1) : "rows.size()>1. multiple rows cannot be clicked at once";
-                for (TablePosition row : rows) {
-                    int rowIndex = row.getRow();
-                    StationData clickedStation = stationList.get(rowIndex);
+                StationData clickedStation = getStationSelected();
+                if (clickedStation != null) {
                     model.setStation(clickedStation.getStationIdAsInt());
                     model.play();
                 }
             }
+        }
+    }
+
+    /**
+     * Returns the StationData instance representing the station selected in the table.
+     * Returns null if no station is selected.
+     * @return the station selected in the table, else null if none selected.
+     */
+    private StationData getStationSelected() {
+        List<StationData> stationDataList = tableView.getItems();
+        List<TablePosition> rows = tableView.getSelectionModel().getSelectedCells();
+        if (rows.size() == 1) {
+            int rowIndex = rows.get(0).getRow();
+            return stationDataList.get(rowIndex);
+        }
+        else {
+            // no station selected
+            assert(rows.size() == 0) : "rows.size() > 1. multiple rows cannot be clicked at once";
+            return null;
         }
     }
 
@@ -89,19 +105,73 @@ public class StationTableController implements Initializable, ModelEventHandler 
         }
     }
 
+    /**
+     * Set the stations who's values are displayed in the tableview.
+     * @param stations list of stations to display
+     */
     public void setStationsOnDisplay(List<Station> stations) {
         Objects.requireNonNull(stations);
         List<StationData> tableEntries = stationToStationData(stations);
         tableView.getItems().setAll(tableEntries);
     }
 
-    private List<StationData> stationToStationData(List<Station> stations) {
+    /**
+     * Convert Station instances from the model to StationData instances that can be processed
+     * by JavaFX property value providers.
+     * StationData and Station instances have a 1 to 1 relationship.
+     * @param stations list of Station instances
+     * @return list of StationData instances with the same values as the Station instances
+     */
+    private static List<StationData> stationToStationData(List<Station> stations) {
         assert(stations != null) : "stations cannot be null";
         List<StationData> convertedStations = new ArrayList<>();
         for (Station s : stations) {
             convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
         }
         return convertedStations;
+    }
+
+    /**
+     * Get the station instance from the model corresponding to the provided
+     * StationData instance.
+     * @param stationData a StationData instance representing a Station from the model
+     * @return Station instance from the model
+     */
+    private Station getStationFromModel(StationData stationData) {
+        assert(stationData != null) : "stationData cannot be null";
+        return model.getStation(stationData.getStationIdAsInt());
+    }
+
+    /**
+     * Mark selected station as a favourite in the model.
+     * If the station is already a favourite, it's favourite status is removed.
+     * @param actionEvent
+     */
+    public void toggleFavouriteStatus(ActionEvent actionEvent) {
+        StationData selectedStationData = getStationSelected();
+        if (selectedStationData != null) {
+            Station selectedStation = getStationFromModel(selectedStationData);
+            model.setStationFavouriteStatus(selectedStation.getStationID(), !selectedStation.isFavourite());
+        }
+    }
+
+    /**
+     * Show all details available from the model about the selected station.
+     * @param actionEvent
+     */
+    public void showDetails(ActionEvent actionEvent) {
+        // TODO: construct fxml view to display station details
+    }
+
+    /**
+     * Remove the selected station from the model
+     * @param actionEvent
+     */
+    public void removeStation(ActionEvent actionEvent) {
+        StationData selectedStationData = getStationSelected();
+        if (selectedStationData != null) {
+            model.removeStation(selectedStationData.getStationIdAsInt());
+        }
     }
 }
 

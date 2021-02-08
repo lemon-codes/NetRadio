@@ -37,6 +37,14 @@ public class StationExplorerController implements Initializable, ModelEventHandl
     public void initialize(URL url, ResourceBundle resourceBundle) {
         model.subscribeToModelEvents(this);
         // fill tables with station data from the model
+        updateAllTableValues();
+
+    }
+
+    /**
+     * Fills tables with up to date station data from the model
+     */
+    private void updateAllTableValues() {
         allStationsTable.getItems().setAll(stationToStationData(model.getAllStations()));
         favouriteStationsTable.getItems().setAll(stationToStationData(getFavouriteStations()));
         mostPlayedStationsTable.getItems().setAll(stationToStationData(getMostPlayedStations()));
@@ -116,6 +124,7 @@ public class StationExplorerController implements Initializable, ModelEventHandl
         stationTabs.getSelectionModel().select(searchResultTab);
     }
 
+
     /**
      * Handle events in the model triggered when other components in the UI
      * alter the models state.
@@ -123,9 +132,17 @@ public class StationExplorerController implements Initializable, ModelEventHandl
      */
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {
-        // TODO: consider handling events
+        switch(event) {
+            case PLAYBACK_STARTED -> {}
+            case PLAYBACK_STOPPED -> {}
+            case STATION_CHANGED -> {}
+            case STATION_ADDED -> updateAllTableValues();
+            case STATION_REMOVED -> updateAllTableValues();
+            case STATION_EDITED -> updateAllTableValues();
+            case SEARCH_RESULTS_READY -> {}
+            case TAG_UPDATE -> {}
+            case VOLUME_CHANGED -> {}
+            case SHUTDOWN -> {}
+        }
     }
-
-
-
 }

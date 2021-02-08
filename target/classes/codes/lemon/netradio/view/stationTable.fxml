@@ -5,6 +5,8 @@
 
 <!-- Default table view. A table with columns station ID, station name and the uri. -->
 <!-- The controller for this view fills the table with details of all stations stored in the model -->
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
 <TableView fx:id="tableView" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
            fx:controller="codes.lemon.netradio.controller.StationTableController"
            prefHeight="200.0" prefWidth="Infinity" maxWidth="Infinity" onMouseClicked="#stationClicked">
@@ -16,4 +18,16 @@
     <sortOrder>
         <fx:reference source="idColumn"/>
     </sortOrder>
+
+    <!-- context menu which is shown when a user right clicks on a station -->
+    <contextMenu>
+        <ContextMenu fx:id="contextMenu">
+            <items>
+                <MenuItem text="Favourite" onAction="#toggleFavouriteStatus"/>
+                <MenuItem text="Details" onAction="#showDetails"/>
+                <MenuItem text="Remove" onAction="#removeStation"/>
+            </items>
+        </ContextMenu>
+
+    </contextMenu>
 </TableView>
