@@ -67,9 +67,7 @@ public class StationExplorerController implements Initializable, ModelEventHandl
         // sort all stations by playCount
         Comparator<Station> playCountComparator = Comparator.comparing(Station::getPlayCount);
         SortedSet<Station> sortedStations = new TreeSet<>(playCountComparator);
-        for (Station s : model.getAllStations()) {
-            sortedStations.add(s);
-        }
+        sortedStations.addAll(model.getAllStations());
 
         // place top 10 (or less if stations.size < 10) most played in list to return
         List<Station> mostPlayedStations = new ArrayList<>();
@@ -80,7 +78,7 @@ public class StationExplorerController implements Initializable, ModelEventHandl
         }
         return mostPlayedStations;
     }
-    
+
 
     /**
      * Converts Station instances from the model to StationData instances.
