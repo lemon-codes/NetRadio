@@ -5,7 +5,7 @@ import java.util.*;
 // TODO: Reconsider overiding of equals and hashcode to only use ID.
 //       Feels like a fragile way of doing things.
 
-class NetRadioPlayer implements RadioPlayer{
+public class NetRadioPlayer implements RadioPlayer{
 
     private final StreamPlayer playback = new StreamPlayerGStreamer();
     private final StationManager stations = new StationManager();  // loads stations from last run
@@ -195,39 +195,5 @@ class NetRadioPlayer implements RadioPlayer{
     public void shutdown() {
         stop();
         stations.shutdown();
-    }
-
-
-    public static void main(String[] args) throws InterruptedException {
-        RadioPlayer radio = new NetRadioPlayer();
-        //radio.addStation("http://stream-al.planetradio.co.uk/clyde1.mp3", "Clyde1");
-        //radio.addStation("https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm", "freedesktop");
-
-
-        for (Station s : radio.getAllStations()) {
-            System.out.println(s.getStationName());
-        }
-
-
-        int id = -1;
-        for (Station s : radio.findStation("clyde")) {
-            System.out.println(s.getStationName());
-            id = s.getStationID();
-        }
-        radio.setStation(id);
-        radio.play();
-        Thread.sleep(10000);
-        radio.setStationFavouriteStatus(id, true);
-        System.out.println(radio.getStation(id).getStationName() + " fav status: " + radio.getStation(id).isFavourite());
-        radio.setStation(1);
-        Thread.sleep(5000);
-        radio.setVolume(20);
-        Thread.sleep(5000);
-        radio.setVolume(100);
-        radio.addStation("test2", "http://test.test2");
-        Thread.sleep(5000);
-        radio.removeStation(5);
-        radio.shutdown();
-
     }
 }

@@ -1,6 +1,6 @@
 package codes.lemon.netradio.view;
 
-import codes.lemon.netradio.model.InstanceFactory;
+import codes.lemon.netradio.controller.ModelAdapterImpl;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                InstanceFactory.getInstance().shutdown();
+                ModelAdapterImpl.getInstance().shutdown();
             }
         });
         primaryStage.show();

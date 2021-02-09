@@ -1,13 +1,10 @@
 package codes.lemon.netradio.controller;
 
-import codes.lemon.netradio.model.InstanceFactory;
-import codes.lemon.netradio.model.ObservableMetadata;
-import codes.lemon.netradio.model.RadioPlayer;
-import codes.lemon.netradio.model.Station;
+import codes.lemon.netradio.model.*;
 
 import java.util.*;
 
-class ModelAdapterImpl implements ModelAdapter{
+public class ModelAdapterImpl implements ModelAdapter{
     // Static implementation of singleton pattern
     // allow all controllers to safely access the same instance
     private static final ModelAdapter INSTANCE = new ModelAdapterImpl();
@@ -21,7 +18,7 @@ class ModelAdapterImpl implements ModelAdapter{
     }
 
     // Instance implementation follows
-    private final RadioPlayer model = InstanceFactory.getInstance();
+    private final RadioPlayer model = new NetRadioPlayer();
     private final Set<ModelEventHandler> eventHandlers = new HashSet<>();
     private List<Station> searchResults = new ArrayList<>();
 
