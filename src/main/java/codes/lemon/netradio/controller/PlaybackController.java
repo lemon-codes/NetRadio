@@ -1,5 +1,6 @@
 package codes.lemon.netradio.controller;
 
+import codes.lemon.netradio.model.Station;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,12 +19,16 @@ import codes.lemon.netradio.model.ObservableMetadata;
  * Displays basic playback metadata (station name, track name, volume level)
  */
 public class PlaybackController implements Initializable, ModelEventHandler {
-    private final ModelAdapter model = ModelAdapterImpl.getInstance();
-
     @FXML private Slider volumeSlider;
     @FXML private Text volumeLevel;
     @FXML private Text stationName;
     @FXML private Text trackName;
+
+    private final ModelAdapter model = ModelAdapterImpl.getInstance();
+    private Station highlightedStation = null;
+
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,6 +60,9 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      * @param actionEvent
      */
     public void playPressed(ActionEvent actionEvent) {
+        if (highlightedStation != null) {
+            model.setStation(highlightedStation.getStationID());
+        }
         model.play();
     }
 
@@ -111,7 +119,16 @@ public class PlaybackController implements Initializable, ModelEventHandler {
             case TAG_UPDATE-> {}
             case VOLUME_CHANGED -> updateVolumeDisplay();
             case SHUTDOWN -> {}
+            case STATION_HIGHLIGHTED -> updateHighlightedStation();
         }
+    }
+
+    /**
+     * Updates the highlighted station. Since this controller does not deal with station lists,
+     * it is up to other components to set the highlighted station.
+     */
+    private void updateHighlightedStation() {
+        this.highlightedStation = model.getHighlightedStation();
     }
 
     /**

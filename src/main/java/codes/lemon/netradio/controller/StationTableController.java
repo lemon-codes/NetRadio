@@ -47,7 +47,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
 
     /**
      * Handles mouse clicks when stations are clicked.
-     * If a single primary click no action is taken.
+     * A single primary click sets the clicked station as the highlighted station.
      * A double primary click starts playback for the clicked station.
      * TODO: A secondary click shows extended station details.
      * @param mouseEvent a mouse click on a station
@@ -59,6 +59,12 @@ public class StationTableController implements Initializable, ModelEventHandler 
                 if (clickedStation != null) {
                     model.setStation(clickedStation.getStationIdAsInt());
                     model.play();
+                }
+            }
+            else if (mouseEvent.getClickCount() == 1) {
+                StationData clickedStation = getStationSelected();
+                if (clickedStation != null) {
+                    model.setHighlightedStation(clickedStation.getStationIdAsInt());
                 }
             }
         }

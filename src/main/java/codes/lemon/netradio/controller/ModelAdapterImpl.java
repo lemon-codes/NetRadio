@@ -8,6 +8,7 @@ public class ModelAdapterImpl implements ModelAdapter{
     // Static implementation of singleton pattern
     // allow all controllers to safely access the same instance
     private static final ModelAdapter INSTANCE = new ModelAdapterImpl();
+    private Station highlightedStation = null;
 
     /**
      * Return a singleton instance of this.
@@ -226,6 +227,31 @@ public class ModelAdapterImpl implements ModelAdapter{
     @Override
     public boolean isPlaying() {
         return model.isPlaying();
+    }
+
+    /**
+     * Returns the most recently highlighted station else null.
+     *
+     * @return the highlighted station, else null if not set.
+     */
+    @Override
+    public Station getHighlightedStation() {
+        return highlightedStation;
+    }
+
+    /**
+     * Sets a station as being highlighted. This has no effect on the model.
+     * Calls to this method trigger a STATION_HIGHLIGHTED event which
+     * can be listened for by any client. The station instance can be retrieved by a
+     * call to `getHighlightedStation()`. Null values are accepted if a client wishes
+     * to clear the highlighted station.
+     *
+     * @param highlightedStationId station ID which is highlighted, or null if none
+     */
+    @Override
+    public void setHighlightedStation(int highlightedStationId) {
+        this.highlightedStation = model.getStation(highlightedStationId);
+        notifySubscribers(ModelEvent.STATION_HIGHLIGHTED);
     }
 
     /**

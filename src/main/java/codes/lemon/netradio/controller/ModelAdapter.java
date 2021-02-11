@@ -31,7 +31,8 @@ public interface ModelAdapter {
         SEARCH_RESULTS_READY,
         TAG_UPDATE,
         VOLUME_CHANGED,
-        SHUTDOWN
+        SHUTDOWN,
+        STATION_HIGHLIGHTED;
     }
 
     /**
@@ -159,6 +160,22 @@ public interface ModelAdapter {
      * @return true if audio is playing, else false.
      */
     boolean isPlaying();
+
+    /**
+     * Returns the most recently highlighted station.
+     * @return the highlighted station.
+     */
+    Station getHighlightedStation();
+
+
+    /**
+     * Sets a station as being highlighted. This has no effect on the model.
+     * Calls to this method trigger a HIGHLIGHTED_STATION_CHANGED event which
+     * can be listened for by any client. The station instance can be retrieved by a
+     * call to `getHighlightedStation()`.
+     * @param highlightedStationId ID of station which is highlighted
+     */
+    void setHighlightedStation(int highlightedStationId);
 
     /**
      * Returns an ObservableMetadata instance which contains stream metadata properties.
