@@ -31,9 +31,9 @@
     <!-- volume controls -->
     <Text text="VO" textAlignment="RIGHT" GridPane.columnIndex="5" GridPane.rowIndex="0" GridPane.rowSpan="1"
           GridPane.valignment="CENTER"/>
-    <Slider fx:id="slider" min="0" max="100" value="100" accessibleText="volume" blockIncrement="25" minorTickCount="5"
+    <Slider fx:id="volumeSlider" min="0" max="100" value="100" accessibleText="volume" blockIncrement="25" minorTickCount="5"
             showTickLabels="true" showTickMarks="true" minHeight="30" minWidth="150" maxWidth="150"
-            GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.rowIndex="0"  GridPane.rowSpan="1"
+            GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.rowIndex="0" GridPane.rowSpan="1"
             GridPane.halignment="RIGHT" GridPane.valignment="CENTER"
             onMouseReleased="#mouseReleased" onMouseDragged="#mouseDragged"/>
     <Text fx:id="volumeLevel" text="" textAlignment="LEFT" wrappingWidth="30" GridPane.columnIndex="7"

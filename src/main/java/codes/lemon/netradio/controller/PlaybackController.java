@@ -13,10 +13,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import codes.lemon.netradio.model.ObservableMetadata;
 
+/**
+ * Offers basic playback functionality and volume control.
+ * Displays basic playback metadata (station name, track name, volume level)
+ */
 public class PlaybackController implements Initializable, ModelEventHandler {
     private final ModelAdapter model = ModelAdapterImpl.getInstance();
 
-    @FXML private Slider slider;
+    @FXML private Slider volumeSlider;
     @FXML private Text volumeLevel;
     @FXML private Text stationName;
     @FXML private Text trackName;
@@ -28,6 +32,11 @@ public class PlaybackController implements Initializable, ModelEventHandler {
         updateVolumeDisplay();
     }
 
+    /**
+     * Subscribes to tag updates provided by the model. Tag updates include
+     * real-time playback metadata. We use these real-time updates to update
+     * the view, keeping the view and model consistent with one another.
+     */
     private void subscribeToTagUpdates() {
         model.getObservableMetadata().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -41,10 +50,18 @@ public class PlaybackController implements Initializable, ModelEventHandler {
         });
     }
 
+    /**
+     * Initiate playback of the currently selected station.
+     * @param actionEvent
+     */
     public void playPressed(ActionEvent actionEvent) {
         model.play();
     }
 
+    /**
+     * Stop playback of the currently playing station.
+     * @param actionEvent
+     */
     public void stopPressed(ActionEvent actionEvent) {
         model.stop();
     }
@@ -61,14 +78,26 @@ public class PlaybackController implements Initializable, ModelEventHandler {
         playPressed(new ActionEvent());
     }
 
+    /**
+     * Volume slider adjusted by user. Update volume in model.
+     * @param mouseEvent volume slider adjusted
+     */
     public void mouseReleased(MouseEvent mouseEvent) {
-        model.setVolume((int)slider.getValue());
+        model.setVolume((int) volumeSlider.getValue());
     }
 
+    /**
+     * Volume slider is being moved by the user. Update volume in real time.
+     * @param mouseEvent volume slider moved
+     */
     public void mouseDragged(MouseEvent mouseEvent) {
-        model.setVolume((int)slider.getValue());
+        model.setVolume((int) volumeSlider.getValue());
     }
 
+    /**
+     * Handle model events triggered by other components in the system.
+     * @param event
+     */
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {
         switch(event) {
@@ -90,8 +119,8 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      * by requesting up to date values from the model
      */
     private void updateVolumeDisplay() {
-        slider.setValue((double) model.getVolume());
-        volumeLevel.setText(String.valueOf((int)slider.getValue()));
+        volumeSlider.setValue((double) model.getVolume());
+        volumeLevel.setText(String.valueOf((int) volumeSlider.getValue()));
     }
 
     /**

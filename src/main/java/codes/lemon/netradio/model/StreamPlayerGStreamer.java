@@ -3,6 +3,7 @@ package codes.lemon.netradio.model;
 import org.freedesktop.gstreamer.*;
 import org.freedesktop.gstreamer.elements.PlayBin;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
@@ -10,7 +11,7 @@ import java.beans.PropertyChangeListener;
  * for audio decoding and playback.
  * This class makes use of GStreamers ability to build custom pipelines
  * on the fly with the required decoders to support playback of the current
- * audio source. This implementation is therefor able to handle any
+ * audio source. This implementation is therefore able to handle any
  * stream types supported by GStreamer.
  * This implementation supports playback of one audio source at a time.
  * The volume level of the audio playback can be adjusted.
@@ -18,7 +19,7 @@ import java.beans.PropertyChangeListener;
  * contain details about streams current state, including the title of the
  * currently playing song.
  */
-class StreamPlayerGStreamer implements StreamPlayer{
+class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
 
     private ObservableMetadata tags = new ObservableMetadata();
     private Element pipeline;
@@ -30,6 +31,7 @@ class StreamPlayerGStreamer implements StreamPlayer{
             Gst.init();
             System.out.println("Gst initialised");
         }
+        tags.addPropertyChangeListener(this);
     }
 
     /**
@@ -219,6 +221,17 @@ class StreamPlayerGStreamer implements StreamPlayer{
                 default -> System.out.println("INFO: Unhandled tag key -> " + key);
             }
         }
+    }
+
+    /**
+     * This method gets called when a bound property is changed.
+     *
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 
     /**

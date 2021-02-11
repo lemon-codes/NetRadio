@@ -1,18 +1,7 @@
 package codes.lemon.netradio.controller;
 
 public class StationData {
-/*
-    private final StringProperty stationId = new SimpleStringProperty();
-    private final StringProperty stationName = new SimpleStringProperty();
-    private final StringProperty stationUri = new SimpleStringProperty();
 
-    public StationData(int id, String name, String uri) {
-        stationId.setValue(String.valueOf(id));
-        stationName.setValue(name);
-        stationUri.setValue(uri);
-    }
-
- */
     private final String stationId;
     private final String stationName;
     private final String stationUri;
