@@ -12,6 +12,8 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Controller for a station explorer. Allows station details to be browsed and searched by users.
  * Contains multiple tabs. Each tab contains a table filled with station details.
@@ -47,7 +49,7 @@ public class StationExplorerController implements Initializable, ModelEventHandl
     private void updateAllTableValues() {
         allStationsTable.getItems().setAll(stationToStationData(model.getAllStations()));
         favouriteStationsTable.getItems().setAll(stationToStationData(getFavouriteStations()));
-        mostPlayedStationsTable.getItems().setAll(stationToStationData(getMostPlayedStations()));
+        mostPlayedStationsTable.getItems().setAll(stationToStationData(getMostPlayedStations(10)));
     }
 
 
@@ -67,24 +69,18 @@ public class StationExplorerController implements Initializable, ModelEventHandl
     }
 
     /**
-     * Returns the 10 stations with the highest "played" count.
+     * Returns at most the top N stations with the highest "played" count.
      * Stations are ordered most played to least played.
-     * @return top 10 most played stations
+     * If topN > stations.size() the returned list will contain stations.size() elements.
+     * @param topN upper bound on number of stations to be returned.
+     * @return top N most played stations
      */
-    private List<Station> getMostPlayedStations() {
-        // sort all stations by playCount
-        Comparator<Station> playCountComparator = Comparator.comparing(Station::getPlayCount);
-        SortedSet<Station> sortedStations = new TreeSet<>(playCountComparator);
-        sortedStations.addAll(model.getAllStations());
-
-        // place top 10 (or less if stations.size < 10) most played in list to return
-        List<Station> mostPlayedStations = new ArrayList<>();
-        int stationCount = Math.min(sortedStations.size(), 10);
-        for (int i=0; i<stationCount; i++) {
-            mostPlayedStations.add(i, sortedStations.last());
-            sortedStations.remove(mostPlayedStations.get(i));
-        }
-        return mostPlayedStations;
+    private List<Station> getMostPlayedStations(int topN) {
+        List<Station> mostPlayed = model.getAllStations().stream()
+                .sorted(Comparator.comparingInt(Station::getPlayCount).reversed())
+                .limit(topN)
+                .collect(toList());
+        return mostPlayed;
     }
 
 

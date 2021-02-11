@@ -84,7 +84,6 @@ class StationLoader {
      *          in the OpenCSVEntry.
      */
     private Station buildStation(OpenCSVEntry entry) {
-        System.out.println("building station with genre = " + entry.getGenre());
         return new RadioStation(entry.getId(), entry.getName(), entry.getUri(), entry.getLastPlayed(),
                 entry.getPlayCount(), entry.getBitrate(), entry.getGenre(), entry.getFavourite());
     }
@@ -98,7 +97,6 @@ class StationLoader {
      * @return a OpenCSVEntry instance containing the field data of the station instance.
      */
     private OpenCSVEntry buildOpenCSVEntry(Station s) {
-        System.out.println("building opencsv entry with genre = " + s.getGenre());
         return new OpenCSVEntry(s.getStationID(), s.getStationName(), s.getUri(), s.getPlayCount(),
                 s.getBitrate(), s.isFavourite(), s.getGenre(), s.getDateLastPlayed());
     }
