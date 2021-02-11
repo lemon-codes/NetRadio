@@ -29,8 +29,10 @@ public class ObservableMetadata implements java.io.Serializable {
     public static final String PROP_CONTAINER_FORMAT = "containerFormat";
     public static final String PROP_COUNTRY = "country";
     public static final String PROP_CITY = "city";
+    public static final String PROP_STREAM_URI = "streamUri";
 
 
+    private String streamUri = "";
     private String title = "";
     private String genre = "";
     private String organisation = "";
@@ -41,7 +43,7 @@ public class ObservableMetadata implements java.io.Serializable {
     private String encoder = "";
     private String encoderVersion = "";
     private String nominalBitrate = "";
-    private String bitrate = "";
+    private int bitrate = -1;
     private String containerFormat = "";
     private String country = "";
     private String city = "";
@@ -71,8 +73,12 @@ public class ObservableMetadata implements java.io.Serializable {
     }
 
     /*-------------------------------
-    |            SETTERS            |
+    |            GETTERS            |
     -------------------------------*/
+    /**
+     * Get the uri of the stream this metadata refers to
+     */
+    public String getStreamUri() { return streamUri; }
 
     /**
      * Get the title of the current track
@@ -132,7 +138,7 @@ public class ObservableMetadata implements java.io.Serializable {
         return nominalBitrate;
     }
 
-    public String getBitrate() {
+    public int getBitrate() {
         return bitrate;
     }
 
@@ -151,6 +157,12 @@ public class ObservableMetadata implements java.io.Serializable {
     /*-------------------------------
     |            SETTERS            |
     -------------------------------*/
+
+    public void setStreamUri(String streamUri) {
+        String oldValue = this.streamUri;
+        this.streamUri = streamUri;
+        pcs.firePropertyChange(PROP_STREAM_URI, oldValue, streamUri);
+    }
 
     public void setTitle(String title) {
         String oldValue = this.title;
@@ -212,8 +224,8 @@ public class ObservableMetadata implements java.io.Serializable {
         pcs.firePropertyChange(PROP_NOMINAL_BITRATE, oldValue, nominalBitrate);
     }
 
-    public void setBitrate(String bitrate) {
-        String oldValue = this.bitrate;
+    public void setBitrate(int bitrate) {
+        int oldValue = this.bitrate;
         this.bitrate = bitrate;
         pcs.firePropertyChange(PROP_BITRATE, oldValue, bitrate);
     }
@@ -241,8 +253,9 @@ public class ObservableMetadata implements java.io.Serializable {
      * All PropertyChangeListeners are notified of the updates.
      */
     public void resetAllProperties() {
+        setStreamUri("");
         setAudioCodec("");
-        setBitrate("");
+        setBitrate(-1);
         setCity("");
         setChannelMode("");
         setCountry("");

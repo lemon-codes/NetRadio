@@ -13,15 +13,16 @@ class RadioStation implements Station{
     private LocalDateTime lastPlayed = null;
     private int playCount = 0;
     private int bitrate = -1;
+    private String genre = "";
     private boolean favourite = false;
 
     // TODO: Consider builder design pattern.
     public RadioStation(int id, String name, String uri) {
-        this(id, name, uri, null, 0, -1, false);
+        this(id, name, uri, null, 0, -1, "", false);
     }
 
     protected RadioStation(int id, String name, String uri, LocalDateTime lastPlayed,
-                           int playCount, int bitrate, boolean favourite) {
+                           int playCount, int bitrate, String genre, boolean favourite) {
         if (id >= 0) {
             this.id = id;
         } else {
@@ -35,6 +36,7 @@ class RadioStation implements Station{
         this.name = Objects.requireNonNull(name);
         this.uri = Objects.requireNonNull(uri);
         this.lastPlayed = lastPlayed;  // null accepted if never played before
+        this.genre = genre;
         this.favourite = favourite;
     }
 
@@ -64,7 +66,7 @@ class RadioStation implements Station{
      * @return the source of this station
      */
     @Override
-    public String getURI() {
+    public String getUri() {
         return uri;
     }
 
@@ -104,6 +106,14 @@ class RadioStation implements Station{
     }
 
     /**
+     * Returns the genre of this station.
+     * @return the genre of this station
+     */
+    public String getGenre() {
+        return genre;
+    }
+
+    /**
      * Determines wither this station is marked as a favourite
      *
      * @return true if channel is a favourite, else false.
@@ -111,6 +121,17 @@ class RadioStation implements Station{
     @Override
     public boolean isFavourite() {
         return favourite;
+    }
+
+    /**
+     * Sets the bitrate at which the current station plays at.
+     *
+     * @param bitrate bitrate of current station.
+     */
+    @Override
+    public void setBitrate(int bitrate) {
+        this.bitrate = bitrate;
+
     }
 
     /**
@@ -126,16 +147,25 @@ class RadioStation implements Station{
         favourite = val;
     }
 
+
+    /**
+     * Sets the genre for this station.
+     * @param genre The genre of this station, must not be null.
+     */
+    public void setGenre(String genre) {
+        this.genre = Objects.requireNonNull(genre);
+    }
+
     /**
      * Mark this station as being played. This updates the values returned by
-     * `getDateLastPlayed()`, `getPlayCount()` and potentially `getBitrate()`
-     * if that value has not been set previously or has changed.
+     * `getDateLastPlayed()`, `getPlayCount()`.
      */
     @Override
     public void markPlayed() {
         lastPlayed = LocalDateTime.now();
         playCount++;
     }
+
 
     /**
      * Compares RadioStation instances for equality based upon their unique ID.

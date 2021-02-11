@@ -126,7 +126,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
         assert(stations != null) : "stations cannot be null";
         List<StationData> convertedStations = new ArrayList<>();
         for (Station s : stations) {
-            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getURI()));
+            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getUri()));
         }
         return convertedStations;
     }

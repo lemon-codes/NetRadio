@@ -22,11 +22,16 @@ public class OpenCSVEntry {
     @CsvBindByName (column = "URI", required = true)
     private String uri;
 
+    @CsvBindByName (column = "Genre")
+    private String genre;
+
     @CsvBindByName (column = "PlayCount", required = true)
     private int playCount;
 
     @CsvBindByName (column = "Bitrate", required = true)
     private int bitrate;
+
+
 
     @CsvBindByName (column = "Favourite", required = true)
     private boolean favourite;
@@ -39,7 +44,7 @@ public class OpenCSVEntry {
     public OpenCSVEntry() {};
 
     public OpenCSVEntry(int id, String name, String uri, int playCount, int bitrate,
-                        boolean favourite, LocalDateTime lastPlayed) {
+                        boolean favourite, String genre, LocalDateTime lastPlayed) {
         // no bounds checks since Station instances only contain valid data
         // OpenCSV does not use this constructor. We cannot check field data before initialisation
         // for instances constructed by OpenCSV
@@ -49,6 +54,7 @@ public class OpenCSVEntry {
         this.playCount = playCount;
         this.bitrate = bitrate;
         this.favourite = favourite;
+        this.genre = genre;
         this.lastPlayed = lastPlayed;
 
     }
@@ -61,5 +67,5 @@ public class OpenCSVEntry {
     public int getBitrate() { return bitrate; }
     public boolean getFavourite() { return favourite; }
     public LocalDateTime getLastPlayed() { return lastPlayed; }
-
+    public String getGenre() { return genre; }
 }

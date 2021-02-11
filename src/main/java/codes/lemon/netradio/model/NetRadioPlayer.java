@@ -1,10 +1,15 @@
 package codes.lemon.netradio.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 
-// TODO: Reconsider overiding of equals and hashcode to only use ID.
-//       Feels like a fragile way of doing things.
 
+/**
+ * A radio player client. Stores station details and supports playback.
+ * Clients can subscribe to real-time metadata updates (provided whenever
+ * playback is occurring). Allows users to favourite, remove and add stations.
+ */
 public class NetRadioPlayer implements RadioPlayer{
 
     private final StreamPlayer playback = new StreamPlayerGStreamer();
@@ -14,6 +19,32 @@ public class NetRadioPlayer implements RadioPlayer{
 
     public NetRadioPlayer() {
         setVolume(RadioPlayer.MAX_VOLUME);
+        subscribeToTagUpdates();
+
+    }
+
+    /**
+     * Subscribes to tag updates provided by the model. Tag updates include
+     * real-time playback metadata. We use these real-time updates to update
+     * the view, keeping the view and model consistent with one another.
+     */
+    private void subscribeToTagUpdates() {
+        playback.getObservableMetadata().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                // only update station details if they are derived from real-time playback
+                // we do not want to reset station details when tags are reset on station change or playback stop.
+                if (currentStation != null && getObservableMetadata().getStreamUri().equals(currentStation.getUri())
+                        && playback.isPlaying()) {
+                    String type = evt.getPropertyName();
+                    switch (type) {
+                        case ObservableMetadata.PROP_GENRE -> stations.setGenre(currentStation.getStationID(), (String) evt.getNewValue());
+                        case ObservableMetadata.PROP_BITRATE -> stations.setBitrate(currentStation.getStationID(), (int) evt.getNewValue());
+                        // TODO: consider other cases
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -24,7 +55,7 @@ public class NetRadioPlayer implements RadioPlayer{
     public void setStation(int id) {
         Station s = stations.getStation(id);
         if (s != null) {
-            playback.setSource(s.getURI());
+            playback.setSource(s.getUri());
             currentStation = s;
         }
         else {

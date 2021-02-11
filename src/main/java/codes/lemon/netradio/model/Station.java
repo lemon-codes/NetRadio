@@ -1,6 +1,7 @@
 package codes.lemon.netradio.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public interface Station {
     /**
@@ -19,7 +20,7 @@ public interface Station {
      * Returns the URI that is being used as a source to stream this Station
      * @return the source of this station
      */
-    String getURI();
+    String getUri();
 
     /**
      * Returns the bitrate of the stream for this station if available.
@@ -43,10 +44,22 @@ public interface Station {
     int getPlayCount();
 
     /**
+     * Returns the genre of this station.
+     * @return the genre of this station
+     */
+    String getGenre();
+
+    /**
      * Returns true if this channel is a favourite, else false.
      * @return true if channel is a favourite, else false.
      */
     boolean isFavourite();
+
+    /**
+     * Sets the bitrate at which the current station plays at.
+     * @param bitrate bitrate of current station
+     */
+    void setBitrate(int bitrate);
 
     /**
      * Sets the favourite status of this station. If passed true this station will
@@ -59,11 +72,17 @@ public interface Station {
     void setFavourite(boolean val);
 
     /**
-     * Mark this station as being played. This updates the values returned by
-     * `getDateLastPlayed()`, `getPlayCount()` and potentially `getBitrate()`
-     * if that value has not been set previously or has changed.
+     * Sets the genre for this station.
+     * @param genre The genre of this station, must not be null.
      */
-    void markPlayed(); // updates lastPlayed, bitrate, playCount
+    void setGenre(String genre);
 
-    // getGenre
+    /**
+     * Mark this station as being played. This updates the values returned by
+     * `getDateLastPlayed()`, `getPlayCount()`.
+     */
+    void markPlayed();
+
+
+
 }

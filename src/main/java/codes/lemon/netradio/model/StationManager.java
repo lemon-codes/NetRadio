@@ -91,6 +91,20 @@ class StationManager {
     }
 
     /**
+     * Sets the playback bitrate of the given station with the given ID.
+     * @param id id of the station to be updated
+     * @param bitrate playback bitrate of the given station
+     */
+    public void setBitrate(int id, int bitrate) {
+        Station s = getStation(id);
+        if (s != null && bitrate != s.getBitrate()) {
+            // only update if new value is different to prevent unnecessary disk I/O
+            s.setBitrate(bitrate);
+            updateDataInStorage();
+        }
+    }
+
+    /**
      * Sets the `Favourite` status of a given station. When true,
      * that station is considered a favourite. When false, the
      * station is no longer considered a favourite.
@@ -100,8 +114,24 @@ class StationManager {
      */
     public void setFavourite(int id, boolean status) {
         Station s = getStation(id);
-        if (s != null) {
+        if (s != null && status != s.isFavourite()) {
             s.setFavourite(status);
+            updateDataInStorage();
+        }
+    }
+
+    /**
+     * Sets the genre of the station with the given ID.
+     * @param id station to be updated
+     * @param genre the genre of the station. Not null
+     */
+    public void setGenre(int id, String genre) {
+        Objects.requireNonNull(genre);
+        Station s = getStation(id);
+        if (s != null && !genre.equals(s.getGenre())) {
+            // only update if new value is different to prevent unnecessary disk I/O
+            System.out.println("\n\n\nSETTING GENRE TO " + genre + "\n\n\n");
+            s.setGenre(genre);
             updateDataInStorage();
         }
     }
@@ -120,7 +150,7 @@ class StationManager {
         List<Station> results = new ArrayList<>();
         for (Station s : stations.values()) {
             boolean found = false;
-            if (s.getURI().toLowerCase().contains(searchTerm)) {
+            if (s.getUri().toLowerCase().contains(searchTerm)) {
                 found = true;
             }
             if (s.getStationName().toLowerCase().contains(searchTerm)) {

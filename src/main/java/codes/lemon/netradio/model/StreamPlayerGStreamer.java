@@ -5,6 +5,7 @@ import org.freedesktop.gstreamer.elements.PlayBin;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 /**
  * An implementation of StreamPlayer using GStreamer as a back end
@@ -19,10 +20,11 @@ import java.beans.PropertyChangeListener;
  * contain details about streams current state, including the title of the
  * currently playing song.
  */
-class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
+class StreamPlayerGStreamer implements StreamPlayer {
 
     private ObservableMetadata tags = new ObservableMetadata();
     private Element pipeline;
+    private String currentSource = "";
     private double volume = MAX_VOLUME;
 
     public StreamPlayerGStreamer() {
@@ -31,7 +33,6 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
             Gst.init();
             System.out.println("Gst initialised");
         }
-        tags.addPropertyChangeListener(this);
     }
 
     /**
@@ -48,6 +49,7 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
     public void setSource(String uri) {
         assert(uri != null) : "null uri supplied";
         tags.resetAllProperties();  // reset tags from previous source
+        tags.setStreamUri(uri);
 
         boolean resumePlay = false;
         if (pipeline != null && pipeline.isPlaying()) {
@@ -97,7 +99,6 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
         }
         pipeline.stop();
         tags.resetAllProperties();
-
     }
 
     /**
@@ -128,7 +129,7 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
      */
     @Override
     public void subscribeToStreamTags(PropertyChangeListener o) {
-
+        tags.addPropertyChangeListener(Objects.requireNonNull(o));
     }
 
     /**
@@ -138,7 +139,7 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
      */
     @Override
     public boolean isPlaying() {
-        return pipeline.isPlaying();
+        return (pipeline != null && pipeline.isPlaying());
     }
 
     /**
@@ -205,7 +206,7 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
             System.out.println(key + " : " + tagList.getString(key, 0));
             switch (key) {
                 case TagKeys.AUDIO_CODEC -> tags.setAudioCodec(tagList.getString(key, 0));
-                case TagKeys.BITRATE -> tags.setBitrate(tagList.getString(key, 0));
+                case TagKeys.BITRATE -> tags.setBitrate(tagList.getNumber(key, 0).intValue());
                 case TagKeys.CHANNEL_MODE -> tags.setChannelMode(tagList.getString(key, 0));
                 case TagKeys.CITY -> tags.setCity(tagList.getString(key, 0));
                 case TagKeys.CONTAINER_FORMAT -> tags.setContainerFormat(tagList.getString(key, 0));
@@ -221,17 +222,6 @@ class StreamPlayerGStreamer implements StreamPlayer, PropertyChangeListener {
                 default -> System.out.println("INFO: Unhandled tag key -> " + key);
             }
         }
-    }
-
-    /**
-     * This method gets called when a bound property is changed.
-     *
-     * @param evt A PropertyChangeEvent object describing the event source
-     *            and the property that has changed.
-     */
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-
     }
 
     /**

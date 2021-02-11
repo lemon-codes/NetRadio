@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * A radio player client. Stores station details and supports playback.
+ * Clients can subscribe to real-time metadata updates (provided whenever
+ * playback is occurring). Allows users to favourite, remove and add stations.
  */
 public interface RadioPlayer {
     public static final int MIN_VOLUME = 0;

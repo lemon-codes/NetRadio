@@ -84,8 +84,9 @@ class StationLoader {
      *          in the OpenCSVEntry.
      */
     private Station buildStation(OpenCSVEntry entry) {
+        System.out.println("building station with genre = " + entry.getGenre());
         return new RadioStation(entry.getId(), entry.getName(), entry.getUri(), entry.getLastPlayed(),
-                entry.getPlayCount(), entry.getBitrate(), entry.getFavourite());
+                entry.getPlayCount(), entry.getBitrate(), entry.getGenre(), entry.getFavourite());
     }
 
     /**
@@ -97,8 +98,9 @@ class StationLoader {
      * @return a OpenCSVEntry instance containing the field data of the station instance.
      */
     private OpenCSVEntry buildOpenCSVEntry(Station s) {
-        return new OpenCSVEntry(s.getStationID(), s.getStationName(), s.getURI(), s.getPlayCount(),
-                s.getBitrate(), s.isFavourite(), s.getDateLastPlayed());
+        System.out.println("building opencsv entry with genre = " + s.getGenre());
+        return new OpenCSVEntry(s.getStationID(), s.getStationName(), s.getUri(), s.getPlayCount(),
+                s.getBitrate(), s.isFavourite(), s.getGenre(), s.getDateLastPlayed());
     }
 
 
@@ -112,22 +114,5 @@ class StationLoader {
         stations.add(new RadioStation(x++, "StartFM", "http://eteris.startfm.lt/startfm.ogg"));
         stations.add(new RadioStation(x++, "FreeDesktop", "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"));
         return stations;
-    }
-
-    public static void main(String[] args) {
-        StationLoader sl = new StationLoader();
-        sl.storeStations(sl.getStationsForDevelopment());
-
-        List<Station> st = sl.getStations();
-        for (Station s : st) {
-            System.out.println("id: " + s.getStationID());
-            System.out.println("name: " + s.getStationName());
-            System.out.println("uri: " + s.getURI());
-            System.out.println("lastPlayed: " + s.getDateLastPlayed());
-            System.out.println("playCount: " + s.getPlayCount());
-            System.out.println("bitrate: " + s.getBitrate());
-            System.out.println("favourite: " + s.isFavourite());
-
-        }
     }
 }
