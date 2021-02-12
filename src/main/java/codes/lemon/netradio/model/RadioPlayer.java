@@ -50,8 +50,8 @@ public interface RadioPlayer {
     Station getCurrentStation();
 
     /**
-     * Returns the details of all stations.
-     * @return all Station instances
+     * Returns the details of all stations in an immutable list
+     * @return all Station instances in an immutable list
      */
     List<Station> getAllStations();
 

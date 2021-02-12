@@ -43,11 +43,12 @@ class StationManager {
     }
 
     /**
-     * Return a list of all station instances.
-     * @return a list of all stations
+     * Return an immutable list of all station instances.
+     * @return an immutable list of all stations
      */
     public List<Station> getAllStations() {
-        return new LinkedList<Station>(stations.values());
+        List<Station> list = new LinkedList<Station>(stations.values());
+        return Collections.unmodifiableList(list);
     }
 
     /**

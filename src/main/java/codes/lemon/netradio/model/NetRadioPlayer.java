@@ -19,8 +19,8 @@ public class NetRadioPlayer implements RadioPlayer{
 
     public NetRadioPlayer() {
         setVolume(RadioPlayer.MAX_VOLUME);
+        // Subscribe to stream metadata
         subscribeToTagUpdates();
-
     }
 
     /**
@@ -122,9 +122,9 @@ public class NetRadioPlayer implements RadioPlayer{
     }
 
     /**
-     * Returns the details of all stations.
+     * Returns the details of all stations as an immutable list.
      *
-     * @return all Station instances
+     * @return all Station instances in an immutable list
      */
     @Override
     public List<Station> getAllStations() {
