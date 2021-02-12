@@ -70,7 +70,7 @@ public class NetRadioPlayer implements RadioPlayer{
     public void play() {
         if (currentStation != null) {
             playback.play();
-            currentStation.markPlayed();
+            stations.markPlayed(currentStation.getStationID());
         }
     }
 

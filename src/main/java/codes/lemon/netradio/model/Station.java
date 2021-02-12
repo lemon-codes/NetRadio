@@ -3,6 +3,9 @@ package codes.lemon.netradio.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * An immutable Station representation which contains all details of a radio station.
+ */
 public interface Station {
     /**
      * Returns this stations unique numerical identifier.
@@ -54,35 +57,4 @@ public interface Station {
      * @return true if channel is a favourite, else false.
      */
     boolean isFavourite();
-
-    /**
-     * Sets the bitrate at which the current station plays at.
-     * @param bitrate bitrate of current station
-     */
-    void setBitrate(int bitrate);
-
-    /**
-     * Sets the favourite status of this station. If passed true this station will
-     * be marked as a favourite. If passed false this station will no longer
-     * be marked as a favourite. Attempting to favourite an already favourite channel,
-     * or unfavourite a station that is not a favourite will result in no action taken
-     * since the station is already in the desired state.
-     * @param val true to mark as favourite, false to unmark as favourite.
-     */
-    void setFavourite(boolean val);
-
-    /**
-     * Sets the genre for this station.
-     * @param genre The genre of this station, must not be null.
-     */
-    void setGenre(String genre);
-
-    /**
-     * Mark this station as being played. This updates the values returned by
-     * `getDateLastPlayed()`, `getPlayCount()`.
-     */
-    void markPlayed();
-
-
-
 }

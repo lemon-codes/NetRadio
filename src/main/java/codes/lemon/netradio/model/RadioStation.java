@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Stores details of a radio station.
  */
-class RadioStation implements Station{
+class RadioStation implements MutableStation{
     private final int id;
     private final String name;
     private final String uri;

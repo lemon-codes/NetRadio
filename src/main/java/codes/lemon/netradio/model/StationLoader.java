@@ -23,9 +23,9 @@ class StationLoader {
      * Multiple calls to this method will never return the same instances.
      * @return previously stored station instances, else an empty list.
      */
-    public List<Station> getStations() {
+    public List<MutableStation> getStations() {
         File stationsFile = new File(FILE_PATH);
-        List<Station> stations = new LinkedList<>();
+        List<MutableStation> stations = new LinkedList<>();
         List<OpenCSVEntry> rows = new LinkedList<>();
 
         try (FileReader in = new FileReader(stationsFile)) {
@@ -52,11 +52,11 @@ class StationLoader {
      * `getStations()`.
      * @param stations A list of station instances to be stored.
      */
-    public void storeStations(List<Station> stations) {
+    public void storeStations(List<MutableStation> stations) {
         List<OpenCSVEntry> rows = new LinkedList<>();
 
         // copy station fields to OpenCSVEntry instance which contains OpenCSV annotations
-        for (Station s : stations) {
+        for (MutableStation s : stations) {
             rows.add(buildOpenCSVEntry(s));
         }
         File stationsFile = new File(FILE_PATH);
@@ -83,7 +83,7 @@ class StationLoader {
      * @return a station instance which contains a sanitised copy of the data contained
      *          in the OpenCSVEntry.
      */
-    private Station buildStation(OpenCSVEntry entry) {
+    private MutableStation buildStation(OpenCSVEntry entry) {
         return new RadioStation(entry.getId(), entry.getName(), entry.getUri(), entry.getLastPlayed(),
                 entry.getPlayCount(), entry.getBitrate(), entry.getGenre(), entry.getFavourite());
     }
@@ -96,21 +96,8 @@ class StationLoader {
      * @param s a station instance
      * @return a OpenCSVEntry instance containing the field data of the station instance.
      */
-    private OpenCSVEntry buildOpenCSVEntry(Station s) {
+    private OpenCSVEntry buildOpenCSVEntry(MutableStation s) {
         return new OpenCSVEntry(s.getStationID(), s.getStationName(), s.getUri(), s.getPlayCount(),
                 s.getBitrate(), s.isFavourite(), s.getGenre(), s.getDateLastPlayed());
-    }
-
-
-    public List<Station> getStationsForDevelopment() {
-        // temporary development aid
-        int x = 0;
-        List<Station> stations = new ArrayList<>();
-        stations.add(new RadioStation(x++, "Clyde1", "http://stream-al.planetradio.co.uk/clyde1.mp3"));
-        stations.add(new RadioStation(x++, "Capital FM", "http://media-ice.musicradio.com/Capital"));
-        stations.add(new RadioStation(x++, "BBC Radio 1", "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1_mf_p"));
-        stations.add(new RadioStation(x++, "StartFM", "http://eteris.startfm.lt/startfm.ogg"));
-        stations.add(new RadioStation(x++, "FreeDesktop", "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"));
-        return stations;
     }
 }

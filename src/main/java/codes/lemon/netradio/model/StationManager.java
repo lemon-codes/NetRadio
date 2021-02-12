@@ -5,7 +5,7 @@ import java.util.*;
 class StationManager {
     private final StationLoader storage = new StationLoader();
     // Station IDs are mapped to Station instances for efficient (T(O) = O(1)) station lookup
-    private final Map<Integer,Station> stations;
+    private final Map<Integer,MutableStation> stations;
 
     public StationManager() {
         // retrieve any stations stored from previous runs.
@@ -21,9 +21,9 @@ class StationManager {
      * @param stationList list of stations
      * @return mapping of station IDs -> station instances
      */
-    private Map<Integer, Station> mapIDToStation(List<Station> stationList) {
-        Map<Integer, Station> stationMap = new HashMap<>();
-        for (Station s : stationList) {
+    private Map<Integer, MutableStation> mapIDToStation(List<MutableStation> stationList) {
+        Map<Integer, MutableStation> stationMap = new HashMap<>();
+        for (MutableStation s : stationList) {
             stationMap.put(s.getStationID(), s);
         }
         return stationMap;
@@ -70,7 +70,7 @@ class StationManager {
         assert (!stations.containsKey(id)) : "ID is not unique";
         Station newStation = new RadioStation(id, name, uri);
 
-        stations.put(id, newStation);
+        stations.put(id, (MutableStation) newStation);
         updateDataInStorage();
         return id;
     }
@@ -97,7 +97,7 @@ class StationManager {
      * @param bitrate playback bitrate of the given station
      */
     public void setBitrate(int id, int bitrate) {
-        Station s = getStation(id);
+        MutableStation s = (MutableStation) getStation(id);
         if (s != null && bitrate != s.getBitrate()) {
             // only update if new value is different to prevent unnecessary disk I/O
             s.setBitrate(bitrate);
@@ -114,7 +114,7 @@ class StationManager {
      * @param status true to mark as a favourite, else false
      */
     public void setFavourite(int id, boolean status) {
-        Station s = getStation(id);
+        MutableStation s = (MutableStation) getStation(id);
         if (s != null && status != s.isFavourite()) {
             s.setFavourite(status);
             updateDataInStorage();
@@ -128,10 +128,9 @@ class StationManager {
      */
     public void setGenre(int id, String genre) {
         Objects.requireNonNull(genre);
-        Station s = getStation(id);
+        MutableStation s = (MutableStation) getStation(id);
         if (s != null && !genre.equals(s.getGenre())) {
             // only update if new value is different to prevent unnecessary disk I/O
-            System.out.println("\n\n\nSETTING GENRE TO " + genre + "\n\n\n");
             s.setGenre(genre);
             updateDataInStorage();
         }
@@ -175,7 +174,17 @@ class StationManager {
      * Write any changes to stations to storage.
      */
     private void updateDataInStorage() {
-        storage.storeStations(getAllStations());
+        storage.storeStations(getAllMutableStations());
+    }
+
+    /**
+     * Provides access to all Station instances through their MutableStation
+     * interface.
+     * @return list of mutable stations
+     */
+    private List<MutableStation> getAllMutableStations() {
+        List<MutableStation> list = new LinkedList<MutableStation>(stations.values());
+        return Collections.unmodifiableList(list);
     }
 
     /**
@@ -195,4 +204,10 @@ class StationManager {
         return id;
     }
 
+    public void markPlayed(int stationID) {
+        MutableStation station = stations.get(stationID);
+        if (station != null) {
+            station.markPlayed();
+        }
+    }
 }
