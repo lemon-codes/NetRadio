@@ -39,9 +39,9 @@ public class StationTableController implements Initializable, ModelEventHandler 
 
         // fill table. Constructor parameters each refer to a field name in StationData
         // TODO: move to helper method which accepts any List<StationData>.
-        idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("stationId"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("stationName"));
-        uriColumn.setCellValueFactory(new PropertyValueFactory<>("stationUri"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        uriColumn.setCellValueFactory(new PropertyValueFactory<>("uri"));
         //tableView.getItems().setAll(getBasicStationData());
     }
 
@@ -57,14 +57,14 @@ public class StationTableController implements Initializable, ModelEventHandler 
             if (mouseEvent.getClickCount() == 2) {
                 StationData clickedStation = getStationSelected();
                 if (clickedStation != null) {
-                    model.setStation(clickedStation.getStationIdAsInt());
+                    model.setStation(clickedStation.getIdAsInt());
                     model.play();
                 }
             }
             else if (mouseEvent.getClickCount() == 1) {
                 StationData clickedStation = getStationSelected();
                 if (clickedStation != null) {
-                    model.setHighlightedStation(clickedStation.getStationIdAsInt());
+                    model.setHighlightedStation(clickedStation.getIdAsInt());
                 }
             }
         }
@@ -132,7 +132,8 @@ public class StationTableController implements Initializable, ModelEventHandler 
         assert(stations != null) : "stations cannot be null";
         List<StationData> convertedStations = new ArrayList<>();
         for (Station s : stations) {
-            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getUri()));
+            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getUri(), s.getGenre(),
+                                                    s.getPlayCount(), s.isFavourite(), s.getBitrate()));
         }
         return convertedStations;
     }
@@ -145,7 +146,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
      */
     private Station getStationFromModel(StationData stationData) {
         assert(stationData != null) : "stationData cannot be null";
-        return model.getStation(stationData.getStationIdAsInt());
+        return model.getStation(stationData.getIdAsInt());
     }
 
     /**
@@ -176,7 +177,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
     public void removeStation(ActionEvent actionEvent) {
         StationData selectedStationData = getStationSelected();
         if (selectedStationData != null) {
-            model.removeStation(selectedStationData.getStationIdAsInt());
+            model.removeStation(selectedStationData.getIdAsInt());
         }
     }
 }

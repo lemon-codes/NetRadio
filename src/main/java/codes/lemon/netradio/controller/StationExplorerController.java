@@ -40,7 +40,6 @@ public class StationExplorerController implements Initializable, ModelEventHandl
         model.subscribeToModelEvents(this);
         // fill tables with station data from the model
         updateAllTableValues();
-
     }
 
     /**
@@ -96,7 +95,8 @@ public class StationExplorerController implements Initializable, ModelEventHandl
         assert(stations != null) : "stations cannot be null";
         List<StationData> convertedStations = new ArrayList<>();
         for (Station s : stations) {
-            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getUri()));
+            convertedStations.add(new StationData(s.getStationID(), s.getStationName(), s.getUri(), s.getGenre(),
+                                                    s.getPlayCount(), s.isFavourite(), s.getBitrate()));
         }
         return convertedStations;
     }
