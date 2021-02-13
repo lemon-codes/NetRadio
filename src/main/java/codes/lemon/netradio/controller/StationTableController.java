@@ -19,30 +19,42 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class StationTableController implements Initializable, ModelEventHandler {
+
     /* Any FXML views utilising this controller must fx:ids which match the following field names */
     @FXML protected TableView<StationData> tableView;
     @FXML protected TableColumn<StationData,String> idColumn;
     @FXML protected TableColumn<StationData, String> nameColumn;
+    @FXML protected TableColumn<StationData, String> genreColumn;
     @FXML protected TableColumn<StationData, String> uriColumn;
 
     protected final ModelAdapter model = ModelAdapterImpl.getInstance();
 
-
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // subscribe to be notified of changes to model state caused by other controllers
         model.subscribeToModelEvents(this);
         // ensure column width expands appropriately when table is resized
-        idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.2));
+        idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.1));
         nameColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.3));
-        uriColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
+        genreColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.2));
+        uriColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.4));
 
-        // fill table. Constructor parameters each refer to a field name in StationData
-        // TODO: move to helper method which accepts any List<StationData>.
-        idColumn.setCellValueFactory(new PropertyValueFactory<StationData, String>("id"));
+        // map columns to StationData field names which will be used to load values into the table
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("uri"));
-        //tableView.getItems().setAll(getBasicStationData());
+    }
+
+    /**
+     * Set the stations who's values are displayed in the tableview.
+     * @param stations list of stations to display
+     */
+    public void setStationsOnDisplay(List<Station> stations) {
+        Objects.requireNonNull(stations);
+        List<StationData> tableEntries = stationToStationData(stations);
+        tableView.getItems().setAll(tableEntries);
     }
 
     /**
@@ -109,16 +121,6 @@ public class StationTableController implements Initializable, ModelEventHandler 
             case SHUTDOWN:
                 break;
         }
-    }
-
-    /**
-     * Set the stations who's values are displayed in the tableview.
-     * @param stations list of stations to display
-     */
-    public void setStationsOnDisplay(List<Station> stations) {
-        Objects.requireNonNull(stations);
-        List<StationData> tableEntries = stationToStationData(stations);
-        tableView.getItems().setAll(tableEntries);
     }
 
     /**
