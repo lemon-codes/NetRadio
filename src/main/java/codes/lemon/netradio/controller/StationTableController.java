@@ -2,15 +2,20 @@ package codes.lemon.netradio.controller;
 
 import codes.lemon.netradio.model.Station;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,10 +31,11 @@ public class StationTableController implements Initializable, ModelEventHandler 
     @FXML protected TableColumn<StationData, String> nameColumn;
     @FXML protected TableColumn<StationData, String> genreColumn;
     @FXML protected TableColumn<StationData, String> uriColumn;
+    @FXML protected TableColumn<StationData, Boolean> favouriteColumn;
 
     protected final ModelAdapter model = ModelAdapterImpl.getInstance();
 
-    
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // subscribe to be notified of changes to model state caused by other controllers
@@ -37,14 +43,18 @@ public class StationTableController implements Initializable, ModelEventHandler 
         // ensure column width expands appropriately when table is resized
         idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.1));
         nameColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.3));
-        genreColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.2));
-        uriColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.4));
+        uriColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
+        genreColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
+        favouriteColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.1));
 
         // map columns to StationData field names which will be used to load values into the table
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("uri"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
+        favouriteColumn.setCellFactory(CheckBoxTableCell.forTableColumn(favouriteColumn));
+
     }
 
     /**

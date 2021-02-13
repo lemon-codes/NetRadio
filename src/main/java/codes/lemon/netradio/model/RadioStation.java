@@ -18,7 +18,7 @@ class RadioStation implements MutableStation{
 
     // TODO: Consider builder design pattern.
     public RadioStation(int id, String name, String uri) {
-        this(id, name, uri, null, 0, -1, "", false);
+        this(id, name, uri, null, 0, -1, "Unknown", false);
     }
 
     protected RadioStation(int id, String name, String uri, LocalDateTime lastPlayed,
