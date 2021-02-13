@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -53,6 +54,8 @@ public class StationTableController implements Initializable, ModelEventHandler 
         uriColumn.setCellValueFactory(new PropertyValueFactory<>("uri"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
+
+        // convert "favourite" boolean flags to CheckBox instances to be displayed in table
         favouriteColumn.setCellFactory(CheckBoxTableCell.forTableColumn(favouriteColumn));
 
     }
@@ -70,23 +73,31 @@ public class StationTableController implements Initializable, ModelEventHandler 
     /**
      * Handles mouse clicks when stations are clicked.
      * A single primary click sets the clicked station as the highlighted station.
+     * A single primary click of the favourite checkbox toggles the favourite status
+     * of the station on the row clicked.
      * A double primary click starts playback for the clicked station.
      * TODO: A secondary click shows extended station details.
      * @param mouseEvent a mouse click on a station
      */
     public void stationClicked(MouseEvent mouseEvent) {
+        StationData clickedStation = getStationSelected();
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             if (mouseEvent.getClickCount() == 2) {
-                StationData clickedStation = getStationSelected();
+                // double click initiates playback of selected station
                 if (clickedStation != null) {
                     model.setStation(clickedStation.getIdAsInt());
                     model.play();
                 }
             }
             else if (mouseEvent.getClickCount() == 1) {
-                StationData clickedStation = getStationSelected();
                 if (clickedStation != null) {
+                    // single click highlights selected station
                     model.setHighlightedStation(clickedStation.getIdAsInt());
+
+                    // if checkbox is clicked toggle favourite status of selected station
+                    if (mouseEvent.getPickResult().getIntersectedNode().getId().equals(favouriteColumn.getId())) {
+                        model.setStationFavouriteStatus(clickedStation.getIdAsInt(), !clickedStation.isFavourite());
+                    }
                 }
             }
         }
