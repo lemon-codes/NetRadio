@@ -136,7 +136,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      * by requesting up to date values from the model
      */
     private void updateVolumeDisplay() {
-        volumeSlider.setValue((double) model.getVolume());
+        volumeSlider.setValue(model.getVolume());
         volumeLevel.setText(String.valueOf((int) volumeSlider.getValue()));
     }
 

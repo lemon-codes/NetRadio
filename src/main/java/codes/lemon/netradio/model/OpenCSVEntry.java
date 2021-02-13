@@ -41,7 +41,7 @@ public class OpenCSVEntry {
     private LocalDateTime lastPlayed;
 
     // public constructor with no parameters required to enable OpenCSV to construct instances
-    public OpenCSVEntry() {};
+    public OpenCSVEntry() {}
 
     public OpenCSVEntry(int id, String name, String uri, int playCount, int bitrate,
                         boolean favourite, String genre, LocalDateTime lastPlayed) {

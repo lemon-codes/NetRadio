@@ -8,8 +8,8 @@ import java.beans.PropertyChangeListener;
  * to stream metadata updates.
  */
 interface StreamPlayer {
-    public static final double MIN_VOLUME = 0.0;
-    public static final double MAX_VOLUME = 1.0;
+    double MIN_VOLUME = 0.0;
+    double MAX_VOLUME = 1.0;
 
     /**
      * Set the source URI where audio will be streamed from.

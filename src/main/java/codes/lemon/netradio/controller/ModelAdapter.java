@@ -32,7 +32,7 @@ public interface ModelAdapter {
         TAG_UPDATE,
         VOLUME_CHANGED,
         SHUTDOWN,
-        STATION_HIGHLIGHTED;
+        STATION_HIGHLIGHTED
     }
 
     /**

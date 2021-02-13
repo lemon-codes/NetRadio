@@ -3,7 +3,6 @@ package codes.lemon.netradio.model;
 import org.freedesktop.gstreamer.*;
 import org.freedesktop.gstreamer.elements.PlayBin;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
@@ -22,9 +21,8 @@ import java.util.Objects;
  */
 class StreamPlayerGStreamer implements StreamPlayer {
 
-    private ObservableMetadata tags = new ObservableMetadata();
+    private final ObservableMetadata tags = new ObservableMetadata();
     private Element pipeline;
-    private String currentSource = "";
     private double volume = MAX_VOLUME;
 
     public StreamPlayerGStreamer() {
