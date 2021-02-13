@@ -177,6 +177,13 @@ public interface ModelAdapter {
      */
     void setHighlightedStation(int highlightedStationId);
 
+
+    /**
+     * Clears the highlighted station if set.
+     */
+    void clearHighlightedStation();
+
+
     /**
      * Returns an ObservableMetadata instance which contains stream metadata properties.
      * Clients can register a PropertyChangeListener with the ObservableMetadata

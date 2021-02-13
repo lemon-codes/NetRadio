@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
@@ -81,26 +82,53 @@ public class StationTableController implements Initializable, ModelEventHandler 
      */
     public void stationClicked(MouseEvent mouseEvent) {
         StationData clickedStation = getStationSelected();
-        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-            if (mouseEvent.getClickCount() == 2) {
-                // double click initiates playback of selected station
-                if (clickedStation != null) {
+
+        if (clickedStation != null) {   // ignore clicks on empty rows
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                if (mouseEvent.getClickCount() == 2) {
+                    // double click initiates playback of selected station
                     model.setStation(clickedStation.getIdAsInt());
                     model.play();
                 }
-            }
-            else if (mouseEvent.getClickCount() == 1) {
-                if (clickedStation != null) {
+                else if (mouseEvent.getClickCount() == 1) {
                     // single click highlights selected station
                     model.setHighlightedStation(clickedStation.getIdAsInt());
 
                     // if checkbox is clicked toggle favourite status of selected station
-                    if (mouseEvent.getPickResult().getIntersectedNode().getId().equals(favouriteColumn.getId())) {
+                    String intersectedNodeId = mouseEvent.getPickResult().getIntersectedNode().getId();
+                    if (intersectedNodeId != null && intersectedNodeId.equals(favouriteColumn.getId())) {
+                        int selectedRow = getRowSelected();
                         model.setStationFavouriteStatus(clickedStation.getIdAsInt(), !clickedStation.isFavourite());
+                        // reset selected row after table updates. TableView may select a different row if previous
+                        // row no longer exists.
+                        tableView.getSelectionModel().select(selectedRow);
+
+                        // update model with new selected table
+                        StationData updatedSelectedStation = tableView.getSelectionModel().getSelectedItem();
+                        if (updatedSelectedStation != null) {
+                            model.setHighlightedStation(updatedSelectedStation.getIdAsInt());
+                        }
+                        else {
+                            // no station selected in view
+                            model.clearHighlightedStation();
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Returns the row number (index) of the selected row.
+     * Returns -1 if no row selected.
+     * @return row number of selected row, else -1 if no row selected.
+     */
+    private int getRowSelected() {
+        List<TablePosition> rows = tableView.getSelectionModel().getSelectedCells();
+        if (rows.size() == 1) {
+            return rows.get(0).getRow();
+        }
+        return -1;
     }
 
     /**
@@ -109,17 +137,18 @@ public class StationTableController implements Initializable, ModelEventHandler 
      * @return the station selected in the table, else null if none selected.
      */
     private StationData getStationSelected() {
+        return tableView.getSelectionModel().getSelectedItem();
+        /*
         List<StationData> stationDataList = tableView.getItems();
-        List<TablePosition> rows = tableView.getSelectionModel().getSelectedCells();
-        if (rows.size() == 1) {
-            int rowIndex = rows.get(0).getRow();
-            return stationDataList.get(rowIndex);
+        int row = getRowSelected();
+        if (row >= 0) {
+            return stationDataList.get(row);
         }
         else {
             // no station selected
-            assert(rows.size() == 0) : "rows.size() > 1. multiple rows cannot be clicked at once";
             return null;
         }
+         */
     }
 
 

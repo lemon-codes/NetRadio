@@ -243,15 +243,24 @@ public class ModelAdapterImpl implements ModelAdapter{
      * Sets a station as being highlighted. This has no effect on the model.
      * Calls to this method trigger a STATION_HIGHLIGHTED event which
      * can be listened for by any client. The station instance can be retrieved by a
-     * call to `getHighlightedStation()`. Null values are accepted if a client wishes
-     * to clear the highlighted station.
+     * call to `getHighlightedStation()`.
      *
-     * @param highlightedStationId station ID which is highlighted, or null if none
+     * @param highlightedStationId station ID which is highlighted
      */
     @Override
     public void setHighlightedStation(int highlightedStationId) {
         this.highlightedStation = model.getStation(highlightedStationId);
         notifySubscribers(ModelEvent.STATION_HIGHLIGHTED);
+    }
+
+
+    /**
+     * Clears the highlighted station if set.
+     */
+    @Override
+    public void clearHighlightedStation() {
+        this.highlightedStation = null;
+        notifySubscribers((ModelEvent.STATION_HIGHLIGHTED));
     }
 
     /**
