@@ -238,7 +238,8 @@ public class StationTableController implements Initializable, ModelEventHandler 
             // highlighted station has changed, update the model. JavaFX TableView updates the view,
             model.setHighlightedStation(getStationSelected().getIdAsInt());
         }
-        else if (key == KeyCode.ENTER) {
+        else if (key == KeyCode.ENTER || key == KeyCode.SPACE) {
+            // Enter key initiates playback of selected station
             model.setStation(getStationSelected().getIdAsInt());
             model.play();
         }
