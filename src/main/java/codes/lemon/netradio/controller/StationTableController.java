@@ -15,6 +15,8 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
@@ -138,17 +140,6 @@ public class StationTableController implements Initializable, ModelEventHandler 
      */
     private StationData getStationSelected() {
         return tableView.getSelectionModel().getSelectedItem();
-        /*
-        List<StationData> stationDataList = tableView.getItems();
-        int row = getRowSelected();
-        if (row >= 0) {
-            return stationDataList.get(row);
-        }
-        else {
-            // no station selected
-            return null;
-        }
-         */
     }
 
 
@@ -230,6 +221,26 @@ public class StationTableController implements Initializable, ModelEventHandler 
         StationData selectedStationData = getStationSelected();
         if (selectedStationData != null) {
             model.removeStation(selectedStationData.getIdAsInt());
+        }
+    }
+
+    /**
+     * Handles key presses.
+     * Currently listens for UP and DOWN arrow key presses to
+     * allow the user to navigate stations in the table.
+     * Listens for ENTER key which initiates playback of the selected
+     * station.
+     * @param keyEvent
+     */
+    public void keyReleased(KeyEvent keyEvent) {
+        KeyCode key = keyEvent.getCode();
+        if (key == KeyCode.UP || key == KeyCode.DOWN) {
+            // highlighted station has changed, update the model. JavaFX TableView updates the view,
+            model.setHighlightedStation(getStationSelected().getIdAsInt());
+        }
+        else if (key == KeyCode.ENTER) {
+            model.setStation(getStationSelected().getIdAsInt());
+            model.play();
         }
     }
 }
