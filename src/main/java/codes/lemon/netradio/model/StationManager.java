@@ -204,6 +204,11 @@ class StationManager {
         return id;
     }
 
+    /**
+     * Mark the given station as being played. This updates any values related to
+     * playback history such as playCount and lastPlayed.
+     * @param stationID the id of the station to be marked as played.
+     */
     public void markPlayed(int stationID) {
         MutableStation station = stations.get(stationID);
         if (station != null) {

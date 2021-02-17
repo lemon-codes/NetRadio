@@ -1,7 +1,6 @@
 package codes.lemon.netradio.model;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * An immutable Station representation which contains all details of a radio station.
