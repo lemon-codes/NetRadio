@@ -4,6 +4,7 @@ import codes.lemon.netradio.model.Station;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,6 +22,7 @@ import codes.lemon.netradio.model.ObservableMetadata;
  * Displays basic playback metadata (station name, track name, volume level)
  */
 public class PlaybackController implements Initializable, ModelEventHandler {
+    @FXML private Button playbackButton;
     @FXML private Slider volumeSlider;
     @FXML private Text volumeLevel;
     @FXML private Text stationName;
@@ -111,7 +113,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {
         switch(event) {
-            case PLAYBACK_STARTED -> updateStationNameDisplay();
+            case PLAYBACK_STARTED -> updatePlaybackDisplay();
             case PLAYBACK_STOPPED -> updatePlaybackDisplay();
             case STATION_CHANGED -> updatePlaybackDisplay();
             case STATION_ADDED -> {} // nothing to update
@@ -143,12 +145,21 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     }
 
     /**
-     * Updates station name and track name text fields in the display by
-     * requesting up to date values from the model.
+     * Updates the current display to reflect the state of the model.
+     * Updates the display of station name, track name and the playback
+     * button.
      */
     private void updatePlaybackDisplay() {
-        updateStationNameDisplay();
-        resetTrackNameDisplay();
+        trackName.setText("");  // clear track name. The model will update this value when it becomes available
+
+        if (model.isPlaying()) {
+            playbackButton.setText("Stop");
+            stationName.setText(model.getCurrentStation().getStationName());
+        }
+        else {
+            playbackButton.setText("Play");
+            stationName.setText("");
+        }
     }
 
 

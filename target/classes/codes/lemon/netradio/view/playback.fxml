@@ -17,7 +17,7 @@
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#previousChannel"/>
     <Button text="Play" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playPressed" />
-    <Button text="Stop" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="0"
+    <Button fx:id="playbackButton" text="Stop" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#stopPressed" />
     <Button text="Next" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="3" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#nextChannel" />

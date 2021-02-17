@@ -62,8 +62,11 @@ public class ModelAdapterImpl implements ModelAdapter{
      */
     @Override
     public void setStation(int id) {
-        model.setStation(id);
-        notifySubscribers(ModelEvent.STATION_CHANGED);
+        Station currentStation = model.getCurrentStation();
+        if (currentStation == null || currentStation.getStationID() != id) {
+            model.setStation(id);
+            notifySubscribers(ModelEvent.STATION_CHANGED);
+        }
     }
 
     /**
@@ -72,8 +75,11 @@ public class ModelAdapterImpl implements ModelAdapter{
      */
     @Override
     public void play() {
-        model.play();
-        notifySubscribers(ModelEvent.PLAYBACK_STARTED);
+        if (!model.isPlaying()) {
+            System.out.println("model.isPlaying() = " + model.isPlaying());
+            model.play();
+            notifySubscribers(ModelEvent.PLAYBACK_STARTED);
+        }
     }
 
     /**
@@ -82,8 +88,10 @@ public class ModelAdapterImpl implements ModelAdapter{
      */
     @Override
     public void stop() {
-        model.stop();
-        notifySubscribers(ModelEvent.PLAYBACK_STOPPED);
+        if (model.isPlaying()) {
+            model.stop();
+            notifySubscribers(ModelEvent.PLAYBACK_STOPPED);
+        }
     }
 
     /**
