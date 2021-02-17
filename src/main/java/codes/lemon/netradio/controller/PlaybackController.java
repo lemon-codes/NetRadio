@@ -32,13 +32,12 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     private Station highlightedStation = null;
 
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         model.subscribeToModelEvents(this);
         subscribeToTagUpdates();
         updateVolumeDisplay();
+        updatePlaybackDisplay();
     }
 
     /**
@@ -64,18 +63,25 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      * @param actionEvent
      */
     public void playPressed(ActionEvent actionEvent) {
-        if (highlightedStation != null) {
-            model.setStation(highlightedStation.getStationID());
-        }
-        model.play();
+
     }
 
     /**
-     * Stop playback of the currently playing station.
+     * Toggles playback. If the model is playing then we stop playback.
+     * If the model is stopped then we initiate playback.
      * @param actionEvent
      */
-    public void stopPressed(ActionEvent actionEvent) {
-        model.stop();
+    public void playbackButtonPressed(ActionEvent actionEvent) {
+        if (model.isPlaying()) {
+            model.stop();
+        }
+        else {
+            // start playback of highlighted station if set, else last set station in model.
+            if (highlightedStation != null) {
+                model.setStation(highlightedStation.getStationID());
+            }
+            model.play();
+        }
     }
 
     // TODO: implement nextChannel()
@@ -162,27 +168,8 @@ public class PlaybackController implements Initializable, ModelEventHandler {
         }
     }
 
-
-    /**
-     * Updates the station name text field in the display by requesting up to
-     * date values from the model.
-     */
-    private void updateStationNameDisplay() {
-        if (model.isPlaying()) {
-            stationName.setText(model.getCurrentStation().getStationName());
-        }
-        else {
-            stationName.setText("");
-        }
+    public void addStationPressed(ActionEvent actionEvent) {
+        System.out.println("TODO: add station");
     }
-
-    /**
-     * Updates the track name text field in the display by requesting up to
-     * date values from the model.
-     */
-    private void resetTrackNameDisplay() {
-        trackName.setText("");
-    }
-
 }
 

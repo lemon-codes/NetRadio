@@ -13,12 +13,13 @@
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
     <gridLinesVisible>false</gridLinesVisible>
     <!-- playback control buttons -->
-    <Button text="Back" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="0" GridPane.rowIndex="0"
+
+    <Button text="Add" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="0" GridPane.rowIndex="0"
+            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#addStationPressed" />
+    <Button text="Back" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#previousChannel"/>
-    <Button text="Play" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="0"
-            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playPressed" />
-    <Button fx:id="playbackButton" text="Stop" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="0"
-            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#stopPressed" />
+    <Button fx:id="playbackButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="0"
+            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playbackButtonPressed" />
     <Button text="Next" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="3" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#nextChannel" />
 

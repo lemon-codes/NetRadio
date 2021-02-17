@@ -76,7 +76,6 @@ public class ModelAdapterImpl implements ModelAdapter{
     @Override
     public void play() {
         if (!model.isPlaying()) {
-            System.out.println("model.isPlaying() = " + model.isPlaying());
             model.play();
             notifySubscribers(ModelEvent.PLAYBACK_STARTED);
         }
