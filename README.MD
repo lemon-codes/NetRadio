@@ -1,4 +1,4 @@
-##Introduction
+## Introduction
 
 Net-Radio is a cross platform audio player with a graphical user interface; designed to store
 and play live audio streams broadcast by internet radio stations. The project is still under
@@ -6,7 +6,7 @@ active development, however the features mentioned in this README have already b
 This README offers only a bried overview of the projects current state and will be rewritten in 
 the latter stages of project to reflect the projects final state.
 
-##Implementation
+## Implementation
 
 Audio playback is supported by GStreamer which is capable of constructing custom pipelines on the fly
 containing the audio demuxers & decoders required to process any provided audio source. This enables Net-
@@ -24,7 +24,7 @@ written FXML files. The view and controllers have been split into separate compo
 remain flexible to future changes. An adapter to the model triggers events which enables all controllers to
 respond to the actions of other controllers while maintaining a loose coupling between controllers.
 
-##Dependencies
+## Dependencies
 
 Environment dependencies:
 * GStreamer >= v1.8
@@ -35,7 +35,7 @@ Package dependencies managed by Maven:
 * gst1-java-core v1.4 - Java bindings for GStreamer
 * OpenCSV v5.3 - Used to store station details between sessions
 
-##Supported Audio Formats
+## Supported Audio Formats
 
 Audio sources offering streams in the following container formats are supported (list is not conclusive):
 * MP3
@@ -43,7 +43,7 @@ Audio sources offering streams in the following container formats are supported 
 * OGG
 * WAV
 
-# Screenshots
+## Screenshots
 
 ![general view](https://lemon.codes/git-screenshots/Net-Radio1.png)
 
