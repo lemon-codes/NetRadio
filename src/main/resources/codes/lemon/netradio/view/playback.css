@@ -7,7 +7,8 @@
 
 /* Playback display (station & track name) */
 .station-name-display {
-    -fx-font: 24 arial;
+    -fx-font: 30 arial;
+    -fx-font-weight: bold;
 }
 
 /* Playback button icons */

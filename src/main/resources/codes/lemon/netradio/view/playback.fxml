@@ -27,18 +27,18 @@
     <Text fx:id="stationName" text="" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="0"
           GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" styleClass="station-name-display"/>
     <Text fx:id="trackName" text="" textAlignment="CENTER" GridPane.columnIndex="4"
-          GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"/>
+          GridPane.rowIndex="1" GridPane.halignment="CENTER"  GridPane.hgrow="ALWAYS"/>
 
     <!-- volume controls -->
     <Text text="VO" textAlignment="RIGHT" GridPane.columnIndex="5" GridPane.rowIndex="0" GridPane.rowSpan="1"
           GridPane.valignment="CENTER"/>
     <Slider fx:id="volumeSlider" min="0" max="100" value="100" accessibleText="volume" blockIncrement="25" minorTickCount="5"
-            showTickLabels="true" showTickMarks="true" minHeight="30" minWidth="150" maxWidth="150"
-            GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.rowIndex="0" GridPane.rowSpan="1"
+            showTickLabels="true" showTickMarks="true" minHeight="50" minWidth="150" maxWidth="150"
+            GridPane.columnIndex="6" GridPane.columnSpan="1" GridPane.rowIndex="0" GridPane.rowSpan="2"
             GridPane.halignment="RIGHT" GridPane.valignment="CENTER"
             onMouseReleased="#mouseReleased" onMouseDragged="#mouseDragged"/>
     <Text fx:id="volumeLevel" text="" textAlignment="LEFT" wrappingWidth="30" GridPane.columnIndex="7"
-          GridPane.rowIndex="0" GridPane.rowSpan="1" GridPane.valignment="CENTER"/>
+          GridPane.rowIndex="0" GridPane.rowSpan="2" GridPane.valignment="CENTER"/>
 
     <!-- <Text fx:id="status" text="" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1"/> -->
 </GridPane>
