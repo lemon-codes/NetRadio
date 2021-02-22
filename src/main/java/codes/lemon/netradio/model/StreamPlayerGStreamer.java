@@ -226,6 +226,7 @@ class StreamPlayerGStreamer implements StreamPlayer {
      * Utility class which contains string constants used as keys by GStreamer to identify tag values.
      */
     private static class TagKeys {
+        // Utility class used over EnumMap as the values should never change or require modification at run time
         private static final String TITLE = "title"; // track title
         private static final String GENRE = "genre"; // station genre
         private static final String ORGANISATION = "organization"; // station name

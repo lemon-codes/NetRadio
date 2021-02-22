@@ -20,9 +20,17 @@ import codes.lemon.netradio.model.ObservableMetadata;
  * Displays basic playback metadata (station name, track name, volume level)
  */
 public class PlaybackController implements Initializable, ModelEventHandler {
+    // Buttons
+    @FXML private Button addStationButton;
+    @FXML private Button previousStationButton;
+    @FXML private Button nextStationButton;
     @FXML private Button playbackButton;
+
+    // volume control
     @FXML private Slider volumeSlider;
     @FXML private Text volumeLevel;
+
+    // playback display
     @FXML private Text stationName;
     @FXML private Text trackName;
 
@@ -80,6 +88,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
             }
             model.play();
         }
+        // view is updated when it receives model events triggered by any of the above actions
     }
 
     // TODO: implement nextChannel()
@@ -155,14 +164,27 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      */
     private void updatePlaybackDisplay() {
         trackName.setText("");  // clear track name. The model will update this value when it becomes available
+        updatePlaybackButtonIcon();
 
         if (model.isPlaying()) {
-            playbackButton.setText("Stop");
             stationName.setText(model.getCurrentStation().getStationName());
         }
         else {
-            playbackButton.setText("Play");
             stationName.setText("");
+        }
+    }
+
+    /**
+     * Updates the playback button icon to reflect its action based upon the models state.
+     * If the model is playing, a "stop" icon is set to allow users to stop playback.
+     * If the model is not playing, a "play" icon is set to allow users to initiate playback.
+     */
+    private void updatePlaybackButtonIcon() {
+        if (model.isPlaying()) {
+            playbackButton.setStyle("-fx-shape: -stop-svg;");
+        }
+        else {
+            playbackButton.setStyle("-fx-shape: -play-svg;");
         }
     }
 

@@ -14,13 +14,13 @@
     <gridLinesVisible>false</gridLinesVisible>
     <!-- playback control buttons -->
 
-    <Button text="Add" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="0" GridPane.rowIndex="0"
+    <Button fx:id="addStationButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="0" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#addStationPressed" />
-    <Button text="Back" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="0"
+    <Button fx:id="previousStationButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#previousChannel"/>
     <Button fx:id="playbackButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playbackButtonPressed" />
-    <Button text="Next" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="3" GridPane.rowIndex="0"
+    <Button fx:id="nextStationButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="3" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#nextChannel" />
 
     <!-- playback details (station & track name)-->
