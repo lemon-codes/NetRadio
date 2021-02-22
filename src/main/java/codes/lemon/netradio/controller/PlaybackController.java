@@ -167,7 +167,8 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     }
 
     public void addStationPressed(ActionEvent actionEvent) {
-        System.out.println("TODO: add station");
+        // show dialogue which allows the user to enter station details to be added to the model
+        new AddStationDialog();
     }
 }
 
