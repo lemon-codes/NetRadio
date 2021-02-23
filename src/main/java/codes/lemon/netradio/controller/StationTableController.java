@@ -5,6 +5,7 @@ import codes.lemon.netradio.model.Station;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -23,6 +24,7 @@ import java.util.ResourceBundle;
 
 public class StationTableController implements Initializable, ModelEventHandler {
 
+    @FXML protected ContextMenu contextMenu;
     /* Any FXML views utilising this controller must fx:ids which match the following field names */
     @FXML protected TableView<StationData> tableView;
     @FXML protected TableColumn<StationData,String> idColumn;
