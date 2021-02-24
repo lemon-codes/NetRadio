@@ -220,6 +220,12 @@ class StreamPlayerGStreamer implements StreamPlayer {
                 default -> System.out.println("INFO: Unhandled tag key -> " + key);
             }
         }
+
+        // Streams stop sending TITLE tag when the previous TITLE tag expires and
+        // there is no replacement yet. We reset the title when this happens.
+        if (!tagList.getTagNames().contains(TagKeys.TITLE)) {
+            tags.setTitle("");
+        }
     }
 
     /**
