@@ -48,11 +48,11 @@ public class StationTableController implements Initializable, ModelEventHandler 
         favouriteColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.1));
 
         // map columns to StationData field names which will be used to load values into the table
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        uriColumn.setCellValueFactory(new PropertyValueFactory<>("uri"));
-        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>(StationData.ID_FIELD));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>(StationData.NAME_FIELD));
+        uriColumn.setCellValueFactory(new PropertyValueFactory<>(StationData.URI_FIELD));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>(StationData.GENRE_FIELD));
+        favouriteColumn.setCellValueFactory(new PropertyValueFactory<>(StationData.FAVOURITE_FIELD));
 
         // convert "favourite" boolean flags to CheckBox instances to be displayed in table
         favouriteColumn.setCellFactory(CheckBoxTableCell.forTableColumn(favouriteColumn));
