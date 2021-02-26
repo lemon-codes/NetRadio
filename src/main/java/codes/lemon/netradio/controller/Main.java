@@ -1,10 +1,7 @@
 package codes.lemon.netradio.controller;
 
-import codes.lemon.netradio.controller.ModelAdapterImpl;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -12,9 +9,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../view/root.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/root.fxml"));
         primaryStage.setTitle("NetRadio");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(loader.load()));
         primaryStage.show();
     }
 
