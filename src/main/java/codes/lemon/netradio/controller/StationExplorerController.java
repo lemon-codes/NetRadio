@@ -4,14 +4,12 @@ import codes.lemon.netradio.model.Station;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.*;
 
+import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -25,8 +23,13 @@ import static java.util.stream.Collectors.toList;
  */
 public class StationExplorerController implements Initializable, ModelEventHandler {
 
+
     @FXML private TabPane stationTabs;
+    @FXML private Tab allStationsTab;
+    @FXML private Tab favouriteStationsTab;
+    @FXML private Tab mostPlayedStationsTab;
     @FXML private Tab searchResultTab;
+
     @FXML private TableView<StationData> allStationsTable;
     @FXML private TableView<StationData> favouriteStationsTable;
     @FXML private TableView<StationData> mostPlayedStationsTable;
@@ -34,12 +37,21 @@ public class StationExplorerController implements Initializable, ModelEventHandl
     @FXML private TextField searchField;
 
     private static final ModelAdapter model = ModelAdapterImpl.getInstance();
+    // Maps all tab IDs to the TableView instance each tab contains
+    private Map<String, TableView<StationData>> tabIdToTable;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         model.subscribeToModelEvents(this);
         // fill tables with station data from the model
         updateAllTableValues();
+
+        // map tab IDs to the tables they contain for easy lookup later
+        tabIdToTable = new HashMap<>();
+        tabIdToTable.put(allStationsTab.getId(), allStationsTable);
+        tabIdToTable.put(favouriteStationsTab.getId(), favouriteStationsTable);
+        tabIdToTable.put(mostPlayedStationsTab.getId(), mostPlayedStationsTable);
+        tabIdToTable.put(searchResultTab.getId(), searchResultStationsTable);
     }
 
     /**
@@ -129,8 +141,10 @@ public class StationExplorerController implements Initializable, ModelEventHandl
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {
         switch(event) {
+            case NEXT_HIGHLIGHTED_STATION_REQUESTED -> highlightNextStation();
             case PLAYBACK_STARTED -> {}
             case PLAYBACK_STOPPED -> {}
+            case PREVIOUS_HIGHLIGHTED_STATION_REQUESTED -> highlightPreviousStation();
             case STATION_CHANGED -> {}
             case STATION_ADDED -> updateAllTableValues();
             case STATION_REMOVED -> updateAllTableValues();
@@ -141,4 +155,67 @@ public class StationExplorerController implements Initializable, ModelEventHandl
             case SHUTDOWN -> {}
         }
     }
+
+    /**
+     * Highlights the station which precedes the currently selected station in the
+     * currently selected TableView.
+     * If no station is selected, the last station in the currently selected TableView
+     * is highlighted.
+     */
+    private void highlightPreviousStation() {
+        TableView<StationData> selectedTable = tabIdToTable.get(stationTabs.getSelectionModel().getSelectedItem().getId());
+        if (selectedTable != null) {
+            int row = getRowSelected(selectedTable);
+            if (row > 0) {
+                // set previous station as currently highlighted station
+                selectedTable.getSelectionModel().select(--row);
+                model.setHighlightedStation(selectedTable.getSelectionModel().getSelectedItem().getIdAsInt());
+            }
+            else {
+                // no station set. Start with the last station.
+                selectedTable.getSelectionModel().select(selectedTable.getItems().size()-1);
+                model.setHighlightedStation(selectedTable.getSelectionModel().getSelectedItem().getIdAsInt());
+            }
+        }
+        else {
+            // assertion error. Each tab should contain a table.
+            // in the future this may change so an assertion error is not thrown.
+        }
+
+    }
+
+    /**
+     * Highlights the station which follows the currently selected station
+     * in the currently selected TableView.
+     * If no station is selected, the first station is selected in the currently
+     * selected TableView.
+     */
+    private void highlightNextStation() {
+        TableView<StationData> selectedTable = tabIdToTable.get(stationTabs.getSelectionModel().getSelectedItem().getId());
+        if (selectedTable != null) {
+            int row = getRowSelected(selectedTable); // -1 if none selected. If none selected we start at row 0
+            if (row < selectedTable.getItems().size()-1) {
+                // set next station as currently highlighted station
+                selectedTable.getSelectionModel().select(++row);
+                model.setHighlightedStation(selectedTable.getSelectionModel().getSelectedItem().getIdAsInt());
+            }
+        }
+
+    }
+
+    /**
+     * Returns the row number (index) of the selected row.
+     * Returns -1 if no row selected.
+     * @param tableView the TableView whose selected row is returned
+     * @return row number of selected row, else -1 if no row selected.
+     */
+    private int getRowSelected(TableView<StationData> tableView) {
+        // tableView.getSelectionModel().getFocusedIndex() is not used as it returns 0 when none selected.
+        List<TablePosition> rows = tableView.getSelectionModel().getSelectedCells();
+        if (rows.size() == 1) {
+            return rows.get(0).getRow();
+        }
+        return -1;
+    }
+
 }

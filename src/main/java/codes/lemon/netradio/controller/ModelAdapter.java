@@ -21,9 +21,12 @@ import java.util.List;
  */
 // TODO: Replace all Station return types with StationData
 public interface ModelAdapter {
+
     enum ModelEvent {
+        NEXT_HIGHLIGHTED_STATION_REQUESTED,
         PLAYBACK_STARTED,
         PLAYBACK_STOPPED,
+        PREVIOUS_HIGHLIGHTED_STATION_REQUESTED,
         STATION_CHANGED,
         STATION_ADDED,
         STATION_REMOVED,
@@ -166,6 +169,18 @@ public interface ModelAdapter {
      * @return the highlighted station.
      */
     Station getHighlightedStation();
+
+    /**
+     * Request the highlighted station is set to the next station available.
+     * Triggers ModelEvent.NEXT_HIGHLIGHTED_STATION_REQUESTED
+     */
+    void requestNextHighlightedStation();
+
+    /**
+     * Request the highlighted station is set to the previous station.
+     * Triggers ModelEvent.PREVIOUS_HIGHLIGHTED_STATION_REQUESTED
+     */
+    void requestPreviousHighlightedStation();
 
 
     /**

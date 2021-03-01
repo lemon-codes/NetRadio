@@ -18,6 +18,7 @@ import codes.lemon.netradio.model.ObservableMetadata;
 /**
  * Offers basic playback functionality and volume control.
  * Displays basic playback metadata (station name, track name, volume level)
+ *
  */
 public class PlaybackController implements Initializable, ModelEventHandler {
     // Buttons
@@ -83,24 +84,45 @@ public class PlaybackController implements Initializable, ModelEventHandler {
         }
         else {
             // start playback of highlighted station if set, else last set station in model.
-            if (highlightedStation != null) {
-                model.setStation(highlightedStation.getStationID());
+            if (!playHighlightedStation()) {
+                model.play();
             }
-            model.play();
         }
         // view is updated when it receives model events triggered by any of the above actions
     }
 
-    // TODO: implement nextChannel()
-    public void nextChannel(ActionEvent actionEvent) {
-        model.setStation(0);
-        playPressed(new ActionEvent());
+    /**
+     * Plays the next station in the list. Other components in the UI
+     * decide which station is chosen.
+     * @param actionEvent
+     */
+    public void playNextStation(ActionEvent actionEvent) {
+        model.requestNextHighlightedStation();
+        playHighlightedStation();
     }
 
-    // TODO: implement previousChannel()
-    public void previousChannel(ActionEvent actionEvent) {
-        model.setStation(1);
-        playPressed(new ActionEvent());
+    /**
+     * Plays the previous station in the list (positioned before the currently highlighted
+     * station. Other components in the UI decide which station is chosen.
+     * @param actionEvent
+     */
+    public void playPreviousStation(ActionEvent actionEvent) {
+        model.requestPreviousHighlightedStation();
+        playHighlightedStation();
+    }
+
+    /**
+     * Attempts to play the highlighted station (if set).
+     * @return true on success, else false.
+     */
+    private boolean playHighlightedStation() {
+        if (highlightedStation != null) {
+            model.setStation(highlightedStation.getStationID());
+            model.play();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

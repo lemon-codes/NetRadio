@@ -14,22 +14,22 @@
              AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
 
         <!-- Default tab that lists all stations -->
-        <Tab text="All" closable="false">
+        <Tab fx:id="allStationsTab" text="All" closable="false">
             <fx:include source="stationTable.fxml" fx:id="allStationsTable"/>
         </Tab>
 
         <!-- Tab that lists only favourited stations -->
-        <Tab text="Favourites" closable="false">
+        <Tab fx:id="favouriteStationsTab" text="Favourites" closable="false">
             <fx:include source="stationTable.fxml" fx:id="favouriteStationsTable"/>
         </Tab>
 
         <!-- Tab that lists the top 10 most played stations -->
-        <Tab text="Most Played" closable="false">
+        <Tab fx:id="mostPlayedStationsTab" text="Most Played" closable="false">
             <fx:include source="stationTable.fxml" fx:id="mostPlayedStationsTable"/>
         </Tab>
 
         <!-- Tab that shows search results to use searches -->
-        <Tab text="Search Results" closable="false" fx:id="searchResultTab">
+        <Tab fx:id="searchResultTab" text="Search Results" closable="false" >
             <fx:include source="stationTable.fxml" fx:id="searchResultStationsTable"/>
         </Tab>
     </TabPane>

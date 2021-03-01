@@ -17,11 +17,11 @@
     <Button fx:id="addStationButton" alignment="CENTER" minHeight="30" minWidth="30" GridPane.columnIndex="0" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#addStationPressed" />
     <Button fx:id="previousStationButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="1" GridPane.rowIndex="0"
-            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#previousChannel"/>
+            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playPreviousStation"/>
     <Button fx:id="playbackButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="2" GridPane.rowIndex="0"
             GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playbackButtonPressed" />
     <Button fx:id="nextStationButton" alignment="CENTER" minHeight="50" minWidth="50" GridPane.columnIndex="3" GridPane.rowIndex="0"
-            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#nextChannel" />
+            GridPane.rowSpan="2" GridPane.valignment="TOP" onAction="#playNextStation" />
 
     <!-- playback details (station & track name)-->
     <Text fx:id="stationName" text="" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="0"

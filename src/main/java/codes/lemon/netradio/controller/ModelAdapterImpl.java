@@ -247,6 +247,26 @@ public class ModelAdapterImpl implements ModelAdapter{
     }
 
     /**
+     * Request the highlighted station is set to the next station available.
+     * Triggers ModelEvent.PREVIOUS_HIGHLIGHTED_STATION_REQUESTED
+     */
+    @Override
+    public void requestNextHighlightedStation() {
+        notifySubscribers(ModelEvent.NEXT_HIGHLIGHTED_STATION_REQUESTED);
+
+    }
+
+    /**
+     * Request the highlighted station is set to the previous station.
+     * Triggers ModelEvent.PREVIOUS_HIGHLIGHTED_STATION_REQUESTED
+     */
+    @Override
+    public void requestPreviousHighlightedStation() {
+        notifySubscribers(ModelEvent.PREVIOUS_HIGHLIGHTED_STATION_REQUESTED);
+
+    }
+
+    /**
      * Sets a station as being highlighted. This has no effect on the model.
      * Calls to this method trigger a STATION_HIGHLIGHTED event which
      * can be listened for by any client. The station instance can be retrieved by a

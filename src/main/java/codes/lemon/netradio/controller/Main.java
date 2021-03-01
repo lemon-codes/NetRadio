@@ -19,7 +19,6 @@ public class Main extends Application {
     public void stop() {
         // shut down model on Application exit.
         ModelAdapterImpl.getInstance().shutdown();
-
     }
 
 
