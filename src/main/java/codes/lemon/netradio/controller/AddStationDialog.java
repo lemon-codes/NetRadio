@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
  * A dialogue which allows users to define a new station which is added to
  * the model. The user is required to supply a station name and audio source (URL).
  */
-public class AddStationDialog extends GridPane implements Initializable {
+class AddStationDialog extends GridPane implements Initializable {
     @FXML private TextField stationName;
     @FXML private TextField sourceURI;
     @FXML private Button addStationButton;

@@ -20,7 +20,7 @@ import java.util.List;
  * it used as public static fields.
  */
 // TODO: Replace all Station return types with StationData
-public interface ModelAdapter {
+interface ModelAdapter {
 
     enum ModelEvent {
         NEXT_HIGHLIGHTED_STATION_REQUESTED,

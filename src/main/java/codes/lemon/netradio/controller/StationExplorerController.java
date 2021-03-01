@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.util.*;
 
-import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -36,7 +35,7 @@ public class StationExplorerController implements Initializable, ModelEventHandl
     @FXML private TableView<StationData> searchResultStationsTable;
     @FXML private TextField searchField;
 
-    private static final ModelAdapter model = ModelAdapterImpl.getInstance();
+    private final ModelAdapter model = ModelAdapterImpl.getInstance();
     // Maps all tab IDs to the TableView instance each tab contains
     private Map<String, TableView<StationData>> tabIdToTable;
 

@@ -4,7 +4,7 @@ import codes.lemon.netradio.model.*;
 
 import java.util.*;
 
-public class ModelAdapterImpl implements ModelAdapter{
+class ModelAdapterImpl implements ModelAdapter{
     // Static implementation of singleton pattern
     // allow all controllers to safely access the same instance
     private static final ModelAdapter INSTANCE = new ModelAdapterImpl();

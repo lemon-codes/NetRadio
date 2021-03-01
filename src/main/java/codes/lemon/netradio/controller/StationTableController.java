@@ -24,16 +24,16 @@ import java.util.ResourceBundle;
 
 public class StationTableController implements Initializable, ModelEventHandler {
 
-    @FXML protected ContextMenu contextMenu;
+    @FXML private ContextMenu contextMenu;
     /* Any FXML views utilising this controller must fx:ids which match the following field names */
-    @FXML protected TableView<StationData> tableView;
-    @FXML protected TableColumn<StationData,String> idColumn;
-    @FXML protected TableColumn<StationData, String> nameColumn;
-    @FXML protected TableColumn<StationData, String> genreColumn;
-    @FXML protected TableColumn<StationData, String> uriColumn;
-    @FXML protected TableColumn<StationData, Boolean> favouriteColumn;
+    @FXML private TableView<StationData> tableView;
+    @FXML private TableColumn<StationData,String> idColumn;
+    @FXML private TableColumn<StationData, String> nameColumn;
+    @FXML private TableColumn<StationData, String> genreColumn;
+    @FXML private TableColumn<StationData, String> uriColumn;
+    @FXML private TableColumn<StationData, Boolean> favouriteColumn;
 
-    protected final ModelAdapter model = ModelAdapterImpl.getInstance();
+    private final ModelAdapter model = ModelAdapterImpl.getInstance();
 
 
     @Override
