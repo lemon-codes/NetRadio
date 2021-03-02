@@ -11,6 +11,11 @@
     -fx-font-weight: bold;
 }
 
+.display-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+}
+
 /* Playback button icons */
 #addStationButton {
     -fx-shape: -add-station-svg2;
