@@ -45,8 +45,8 @@ Audio sources offering streams in the following container formats are supported 
 
 ## Screenshots
 
-![stopped view](https://lemon.codes/git-screenshots/Net-Radio1-2.png)
+![stopped view](https://lemon.codes/git-screenshots/net-radio/Net-Radio1-3.png)
 
-![playback view](https://lemon.codes/git-screenshots/Net-Radio2-2.png)
+![playback view](https://lemon.codes/git-screenshots/net-radio/Net-Radio2-3.png)
 
-![search view](https://lemon.codes/git-screenshots/Net-Radio3-2.png)
+![search view](https://lemon.codes/git-screenshots/net-radio/Net-Radio3-3.png)
