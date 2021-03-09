@@ -5,6 +5,9 @@ import com.opencsv.bean.CsvBindByName;
 import java.time.LocalDateTime;
 
 /**
+ * Note: This class has been made public to allow the OpenCSV library to instantiate instances with
+ * entry data mapped to instance fields. It is not intended for use by clients of this project.
+ *
  * Stores unsanitised details from a csv entry. If we bound these annotations
  * directly to a Station implementation, because OpenCSV instantiates object fields
  * with no validation it could result in Station instances being published with an
