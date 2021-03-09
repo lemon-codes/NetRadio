@@ -31,7 +31,7 @@ public interface RadioPlayer {
      * Sets the audio playback volume for the current station
      * and future stations. Volume must be between(inclusive) MIN_VOLUME
      * and MAX_VOLUME which at current is 0 and 100 respectively.
-     * @param volumeLevel Audio playback volume. 0 <= volumeLevel <= 100
+     * @param volumeLevel Audio playback volume. {@code 0 <= volumeLevel <= 100}
      */
     void setVolume(int volumeLevel);
 
@@ -39,7 +39,7 @@ public interface RadioPlayer {
      * Get the audio playback volume.
      * Volume is between MIN_VOLUME and MAX_VOLUME which at current
      * is 0 and 100 respectively.
-     * @return Audio playback volume. 0 <= volumeLevel <= 100
+     * @return Audio playback volume. {@code 0 <= volumeLevel <= 100}
      */
     int getVolume();
 

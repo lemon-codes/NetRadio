@@ -64,19 +64,12 @@ public class PlaybackController implements Initializable, ModelEventHandler {
             }
         });
     }
-
-    /**
-     * Initiate playback of the currently selected station.
-     * @param actionEvent
-     */
-    public void playPressed(ActionEvent actionEvent) {
-
-    }
+    
 
     /**
      * Toggles playback. If the model is playing then we stop playback.
      * If the model is stopped then we initiate playback.
-     * @param actionEvent
+     * @param actionEvent playback button event
      */
     public void playbackButtonPressed(ActionEvent actionEvent) {
         if (model.isPlaying()) {
@@ -94,7 +87,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     /**
      * Plays the next station in the list. Other components in the UI
      * decide which station is chosen.
-     * @param actionEvent
+     * @param actionEvent play next station button event
      */
     public void playNextStation(ActionEvent actionEvent) {
         model.requestNextHighlightedStation();
@@ -104,7 +97,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
     /**
      * Plays the previous station in the list (positioned before the currently highlighted
      * station. Other components in the UI decide which station is chosen.
-     * @param actionEvent
+     * @param actionEvent play previous station button
      */
     public void playPreviousStation(ActionEvent actionEvent) {
         model.requestPreviousHighlightedStation();
@@ -143,7 +136,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
 
     /**
      * Handle model events triggered by other components in the system.
-     * @param event
+     * @param event a ModelEvent indicating the models state has been altered
      */
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {

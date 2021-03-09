@@ -141,7 +141,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
 
     /**
      * TODO: handle events
-     * @param event
+     * @param event a ModelEvent that indicates the models state has been altered
      */
     @Override
     public void handleEvent(ModelAdapter.ModelEvent event) {
@@ -191,7 +191,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
     /**
      * Mark selected station as a favourite in the model.
      * If the station is already a favourite, it's favourite status is removed.
-     * @param actionEvent
+     * @param actionEvent toggle favourite status event
      */
     public void toggleFavouriteStatus(ActionEvent actionEvent) {
         StationData selectedStationData = getStationSelected();
@@ -203,7 +203,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
 
     /**
      * Show all details available from the model about the selected station.
-     * @param actionEvent
+     * @param actionEvent show details event
      */
     public void showDetails(ActionEvent actionEvent) {
         // TODO: construct fxml view to display station details
@@ -211,7 +211,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
 
     /**
      * Remove the selected station from the model
-     * @param actionEvent
+     * @param actionEvent remove station event
      */
     public void removeStation(ActionEvent actionEvent) {
         StationData selectedStationData = getStationSelected();
@@ -226,7 +226,7 @@ public class StationTableController implements Initializable, ModelEventHandler 
      * allow the user to navigate stations in the table.
      * Listens for ENTER key which initiates playback of the selected
      * station.
-     * @param keyEvent
+     * @param keyEvent key press
      */
     public void keyReleased(KeyEvent keyEvent) {
         KeyCode key = keyEvent.getCode();

@@ -89,7 +89,7 @@ public class NetRadioPlayer implements RadioPlayer{
      * Sets the audio playback volume for the current stream stream
      * and future streams. Volume must be between(inclusive) MIN_VOLUME
      * and MAX_VOLUME which at current is 0 and 100 respectively.
-     * @param volumeLevel Audio playback volume. 0 <= volumeLevel <= 100
+     * @param volumeLevel Audio playback volume. {@code 0 <= volumeLevel <= 100}
      */
     @Override
     public void setVolume(int volumeLevel) {
@@ -105,7 +105,7 @@ public class NetRadioPlayer implements RadioPlayer{
      * Get the audio playback volume.
      * Volume is between MIN_VOLUME and MAX_VOLUME which at current
      * is 0 and 100 respectively.
-     * @return Audio playback volume. 0 <= volumeLevel <= 100
+     * @return Audio playback volume. {@code 0 <= volumeLevel <= 100}
      */
     public int getVolume() {
         return volume;

@@ -67,6 +67,7 @@ public class ObservableMetadata implements java.io.Serializable {
     /**
      * Unregister a previously registered PropertyChangeListener. The removed PropertyChangeListener
      * will no longer be notified when property values are updated.
+     * @param pcl a property change listener that was previously registered with this instance
      */
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         pcs.removePropertyChangeListener(pcl);
@@ -77,6 +78,7 @@ public class ObservableMetadata implements java.io.Serializable {
     -------------------------------*/
     /**
      * Get the uri of the stream this metadata refers to
+     * @return uri of the audio source
      */
     public String getStreamUri() { return streamUri; }
 
