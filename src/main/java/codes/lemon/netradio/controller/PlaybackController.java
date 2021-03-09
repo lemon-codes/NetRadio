@@ -64,7 +64,7 @@ public class PlaybackController implements Initializable, ModelEventHandler {
             }
         });
     }
-    
+
 
     /**
      * Toggles playback. If the model is playing then we stop playback.

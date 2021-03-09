@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 class AddStationDialog extends GridPane implements Initializable {
     @FXML private TextField stationName;
     @FXML private TextField sourceURI;
-    @FXML private Button addStationButton;
+    @FXML private Button submitButton;
     @FXML private Button cancelButton;
 
     private final ModelAdapter model = ModelAdapterImpl.getInstance();
@@ -62,7 +62,7 @@ class AddStationDialog extends GridPane implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // add event handlers
-        addStationButton.setOnAction(event -> addStationButtonPressed());
+        submitButton.setOnAction(event -> addStationButtonPressed());
         cancelButton.setOnAction(event -> stage.close());
     }
 
