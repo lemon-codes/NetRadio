@@ -17,9 +17,9 @@
     <TextField fx:id="sourceURI" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.ColumnSpan="2"
                promptText="http://example.com/station.aac" prefWidth="225"/>
 
-    <Button fx:id="submitButton" text="Add" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
-            minWidth="110" maxWidth="110" defaultButton="true" />
+    <Button fx:id="submitButton" text="Save" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
+            minWidth="150" maxWidth="150" defaultButton="true" />
     <Button fx:id="cancelButton" text="Cancel" GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.halignment="RIGHT"
-            minWidth="110" maxWidth="110" cancelButton="true"/>
+            minWidth="150" maxWidth="150" cancelButton="true"/>
 
 </fx:root>

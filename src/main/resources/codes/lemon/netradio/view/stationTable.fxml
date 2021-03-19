@@ -26,6 +26,7 @@
     <contextMenu>
         <ContextMenu fx:id="contextMenu">
             <items>
+                <MenuItem text="Edit Station" onAction="#editStation"/>
                 <MenuItem text="Toggle Favourite" onAction="#toggleFavouriteStatus"/>
                 <MenuItem text="Details" onAction="#showDetails"/>
                 <MenuItem text="Remove" onAction="#removeStation"/>

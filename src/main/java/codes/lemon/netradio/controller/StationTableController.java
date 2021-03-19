@@ -189,6 +189,18 @@ public class StationTableController implements Initializable, ModelEventHandler 
     }
 
     /**
+     * Edit the selected station.
+     * Allows for the source uri and station name to be modified.
+     * @param actionEvent
+     */
+    public void editStation(ActionEvent actionEvent) {
+        StationData selectedStationData = getStationSelected();
+        if (selectedStationData != null) {
+            new EditStationDialog(selectedStationData.getIdAsInt());
+        }
+    }
+
+    /**
      * Mark selected station as a favourite in the model.
      * If the station is already a favourite, it's favourite status is removed.
      * @param actionEvent toggle favourite status event
@@ -240,5 +252,6 @@ public class StationTableController implements Initializable, ModelEventHandler 
             model.play();
         }
     }
+
 }
 
