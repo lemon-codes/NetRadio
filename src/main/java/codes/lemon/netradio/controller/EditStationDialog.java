@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -24,8 +25,10 @@ import java.util.ResourceBundle;
 class EditStationDialog extends GridPane implements Initializable {
     @FXML private TextField stationName;
     @FXML private TextField sourceURI;
+    @FXML private CheckBox favouriteStatus;
     @FXML private Button submitButton;
     @FXML private Button cancelButton;
+
 
     private final ModelAdapter model = ModelAdapterImpl.getInstance();
     private final Stage stage;
@@ -73,6 +76,9 @@ class EditStationDialog extends GridPane implements Initializable {
         stationName.setText(Objects.requireNonNull(selectedStation.getStationName()));
         sourceURI.setText(Objects.requireNonNull(selectedStation.getUri()));
 
+        // mirror current favourite status
+        favouriteStatus.setSelected(selectedStation.isFavourite());
+
         // add event handlers
         submitButton.setOnAction(event -> submitButtonPressed());
         cancelButton.setOnAction(event -> stage.close());
@@ -91,7 +97,7 @@ class EditStationDialog extends GridPane implements Initializable {
         int newID = model.addStation(stationName.getText(), sourceURI.getText());
 
         // maintain favourite status
-        model.setStationFavouriteStatus(newID, selectedStation.isFavourite());
+        model.setStationFavouriteStatus(newID, favouriteStatus.isSelected());
 
         // close window
         stage.close();

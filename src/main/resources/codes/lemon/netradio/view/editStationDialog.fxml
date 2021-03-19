@@ -17,9 +17,14 @@
     <TextField fx:id="sourceURI" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.ColumnSpan="2"
                promptText="http://example.com/station.aac" prefWidth="225"/>
 
-    <Button fx:id="submitButton" text="Save" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
+    <Label text="Favourite: " minWidth="-Infinity" GridPane.rowIndex="2" GridPane.columnIndex="0"
+           GridPane.halignment="RIGHT"/>
+    <CheckBox fx:id="favouriteStatus" minWidth="-Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2"
+              prefWidth="225" />
+
+    <Button fx:id="submitButton" text="Save" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
             minWidth="150" maxWidth="150" defaultButton="true" />
-    <Button fx:id="cancelButton" text="Cancel" GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.halignment="RIGHT"
+    <Button fx:id="cancelButton" text="Cancel" GridPane.rowIndex="3" GridPane.columnIndex="2" GridPane.halignment="RIGHT"
             minWidth="150" maxWidth="150" cancelButton="true"/>
 
 </fx:root>
