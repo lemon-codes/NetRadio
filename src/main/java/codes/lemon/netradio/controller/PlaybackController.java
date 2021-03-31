@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
@@ -193,13 +194,16 @@ public class PlaybackController implements Initializable, ModelEventHandler {
      * Updates the playback button icon to reflect its action based upon the models state.
      * If the model is playing, a "stop" icon is set to allow users to stop playback.
      * If the model is not playing, a "play" icon is set to allow users to initiate playback.
+     * The button tooltip text is also updated to describe the buttons current function.
      */
     private void updatePlaybackButtonIcon() {
         if (model.isPlaying()) {
             playbackButton.setStyle("-fx-shape: -stop-svg;");
+            playbackButton.setTooltip(new Tooltip("Stop playback"));
         }
         else {
             playbackButton.setStyle("-fx-shape: -play-svg;");
+            playbackButton.setTooltip(new Tooltip("Start playback"));
         }
     }
 
