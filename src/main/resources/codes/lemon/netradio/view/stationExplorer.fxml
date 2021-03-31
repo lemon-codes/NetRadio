@@ -36,7 +36,11 @@
 
     <!-- Search box and submission button -->
     <HBox maxWidth="Infinity" minHeight="26" maxHeight="26" AnchorPane.topAnchor="4.0" AnchorPane.rightAnchor="2.0">
-        <Button text="Search" onAction="#searchStations"/>
+        <Button text="Search" onAction="#searchStations">
+            <tooltip>
+                <Tooltip text="Search all stations" />
+            </tooltip>
+        </Button>
         <TextField fx:id="searchField" promptText="Search stations.." onAction="#searchStations" prefWidth="250" minWidth="50"/>
     </HBox>
 
