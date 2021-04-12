@@ -4,6 +4,8 @@ import org.freedesktop.gstreamer.*;
 import org.freedesktop.gstreamer.elements.PlayBin;
 
 import java.beans.PropertyChangeListener;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 /**
@@ -58,7 +60,16 @@ class StreamPlayerGStreamer implements StreamPlayer {
         // build a new pipeline with the nodes required to handle the new source
         // playbin argument instructs Gstreamer to build a pipeline with the appropriate
         // docoders/decrypters etc for the given URI
-        pipeline = Gst.parseLaunch("playbin uri=" + uri);
+        //pipeline = Gst.parseLaunch("playbin uri=" + uri);
+        // TODO: clients will supply URI instance
+        URI source = null;
+        try {
+            source = new URI(uri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        pipeline = PlayBinFactory.buildPlaybackPlayBin(source);
+
         setVolume(volume); // restore previously set volume level
 
         // each pipeline has a bus. Connect listeners to new pipelines bus
