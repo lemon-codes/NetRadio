@@ -68,7 +68,10 @@ class StreamPlayerGStreamer implements StreamPlayer {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        pipeline = PlayBinFactory.buildPlaybackPlayBin(source);
+        PlayBin pb = PlayBinFactory.buildPlaybackPlayBin();
+        pb.setURI(source);
+        pipeline = pb;
+
         //pipeline = PlayBinFactory.buildRecordingPlaybackPlayBin(source, null, PlayBinFactory.AUDIO_FORMAT.MP3);
         setVolume(volume); // restore previously set volume level
 

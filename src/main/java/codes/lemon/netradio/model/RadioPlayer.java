@@ -8,8 +8,8 @@ import java.util.List;
  * playback is occurring). Allows users to favourite, remove and add stations.
  */
 public interface RadioPlayer {
-    int MIN_VOLUME = 0;
-    int MAX_VOLUME = 100;
+    int MIN_VOLUME = Playback.MIN_VOLUME;
+    int MAX_VOLUME = Playback.MAX_VOLUME;
 
     /**
      * Select the station to be played.
