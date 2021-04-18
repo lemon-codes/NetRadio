@@ -6,7 +6,9 @@ import org.freedesktop.gstreamer.elements.PlayBin;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * An implementation of StreamPlayer using GStreamer as a back end
@@ -24,8 +26,8 @@ import java.util.Objects;
 class StreamPlayerGStreamer implements StreamPlayer {
 
     private final ObservableMetadata tags = new ObservableMetadata();
-    private Element pipeline;
-    private double volume = MAX_VOLUME;
+    private Playback playback;
+    private int volume = MAX_VOLUME;
 
     public StreamPlayerGStreamer() {
         // initialise GStreamer
@@ -43,6 +45,7 @@ class StreamPlayerGStreamer implements StreamPlayer {
      * previous source is stopped and playback resumes immediately using the new
      * source. If nothing is playing when a source is set, playback will not start
      * until `play()` is called by the client.
+     *
      * @param uri uri pointing to an audio source
      */
     @Override
@@ -52,8 +55,8 @@ class StreamPlayerGStreamer implements StreamPlayer {
         tags.setStreamUri(uri);
 
         boolean resumePlay = false;
-        if (pipeline != null && pipeline.isPlaying()) {
-            pipeline.stop();
+        if (playback != null && !playback.isStopped()) {
+            playback.stop();
             resumePlay = true;
         }
 
@@ -68,18 +71,11 @@ class StreamPlayerGStreamer implements StreamPlayer {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        PlayBin pb = PlayBinFactory.buildPlaybackPlayBin();
-        pb.setURI(source);
-        pipeline = pb;
-
-        //pipeline = PlayBinFactory.buildRecordingPlaybackPlayBin(source, null, PlayBinFactory.AUDIO_FORMAT.MP3);
+        playback = new PlaybackStream(source, tags);
         setVolume(volume); // restore previously set volume level
 
-        // each pipeline has a bus. Connect listeners to new pipelines bus
-        connectBusListeners(pipeline);
-        //resumePlay = true;
         if (resumePlay) {
-            pipeline.play();
+            playback.play();
         }
         System.out.println("source set to " + uri);
     }
@@ -92,10 +88,10 @@ class StreamPlayerGStreamer implements StreamPlayer {
      */
     @Override
     public void play() {
-        if (pipeline == null) {
+        if (playback == null) {
             throw new IllegalStateException("no stream selected for playback");
         }
-        pipeline.play();
+        playback.play();
     }
 
     /**
@@ -106,42 +102,41 @@ class StreamPlayerGStreamer implements StreamPlayer {
      */
     @Override
     public void stop() {
-        if (pipeline == null) {
+        if (playback == null) {
             throw new IllegalStateException("no stream selected for playback. Nothing to stop");
         }
-        pipeline.stop();
+        playback.stop();
         tags.resetAllProperties();
     }
 
     /**
      * Sets the audio playback volume for the current pipeline.
      * Volume must be in the range `MIN_VOLUME` to `MAX_VOLUME` (inclusive).
+     *
      * @param volumeLevel Audio playback volume. 0.0 <= volume <= 1.0
      */
     @Override
-    public void setVolume(double volumeLevel) {
-
-        if (volumeLevel < MIN_VOLUME || volumeLevel > MAX_VOLUME) {
-            throw new IllegalArgumentException("volume must be in the range " +
-                                                MIN_VOLUME + " to " + MAX_VOLUME +
-                                                "(inclusive)");
-        }
+    public void setVolume(int volumeLevel) {
+        // should be checked already by NetRadioPlayer
+        assert (volumeLevel >= Playback.MIN_VOLUME && volumeLevel <= Playback.MAX_VOLUME);
         volume = volumeLevel;
-        if (pipeline instanceof PlayBin) {
-            // should always be true since we initialise pipeline with the playbin argument
-            PlayBin pb = (PlayBin)pipeline;
-            pb.setVolume(volume);
-            System.out.println("volume set to: " + volume);
+        if (playback != null) {
+            playback.setVolume(volumeLevel);
         }
+        System.out.println("volume set to: " + volume);
     }
 
     /**
      * Subscribe to be notified when stream tags are updated.
-     * @param o observer
+     *
+     * @param pcl listener
      */
     @Override
-    public void subscribeToStreamTags(PropertyChangeListener o) {
-        tags.addPropertyChangeListener(Objects.requireNonNull(o));
+    public void subscribeToStreamTags(PropertyChangeListener pcl) {
+        Objects.requireNonNull(pcl);
+        tags.addPropertyChangeListener(pcl);
+        //tags.addPropertyChangeListener(Objects.requireNonNull(pcl));
+        //listeners.add(pcl);
     }
 
     /**
@@ -151,7 +146,7 @@ class StreamPlayerGStreamer implements StreamPlayer {
      */
     @Override
     public boolean isPlaying() {
-        return (pipeline != null && pipeline.isPlaying());
+        return (playback != null && !playback.isStopped());
     }
 
     /**
@@ -166,105 +161,5 @@ class StreamPlayerGStreamer implements StreamPlayer {
     @Override
     public ObservableMetadata getObservableMetadata() {
         return tags;
-    }
-
-
-    /**
-     * Each pipeline has a bus which gstreamer uses to send messages.
-     * By connecting listeners to this bus we can be receive these messages
-     * and take appropriate action.
-     * Messages may be informative, such as stream tags (title, bitrate, etc),
-     * may indicate the end of the stream, or may indicate exceptions/errors
-     * within gstreamer.
-     * Tag messages are used to update the ObservableMetadata instances
-     * @param pipe
-     */
-    private void connectBusListeners(Element pipe) {
-        Bus bus = pipe.getBus();
-
-        // lambda instead of anonymous inner class
-        bus.connect((Bus.EOS) source -> {
-            System.out.println("We have reached the end of the stream");
-            // need pipeline.stop() to ensure window closes with video
-            pipe.stop();  // sets the state to NULL
-        });
-
-        bus.connect(new Bus.ERROR() {
-
-            @Override
-            public void errorMessage(GstObject source, int i, String s) {
-                System.out.println("Error: " + s + "\ti=" + i);
-            }
-        });
-
-        // update the ObservabeTags instance with the latest tag properties as they arrive off the Bus.
-        bus.connect(new Bus.TAG() {
-
-            @Override
-            public void tagsFound(GstObject source, TagList tagList) {
-                updateTags(tagList);
-            }
-        });
-    }
-
-    /**
-     * Updates the current ObservableTag instance with the supplied tag properties.
-     * ObservableTag will update registered listeners.
-     * @param tagList a list of new tags
-     */
-    private void updateTags(TagList tagList) {
-        System.out.println("\n---------------------------------------------------");
-        for (String key : tagList.getTagNames()) {
-            System.out.println(key + " : " + tagList.getString(key, 0));
-            switch (key) {
-                case TagKeys.AUDIO_CODEC -> tags.setAudioCodec(tagList.getString(key, 0));
-                case TagKeys.BITRATE -> tags.setBitrate(tagList.getNumber(key, 0).intValue());
-                case TagKeys.CHANNEL_MODE -> tags.setChannelMode(tagList.getString(key, 0));
-                case TagKeys.CITY -> tags.setCity(tagList.getString(key, 0));
-                case TagKeys.CONTAINER_FORMAT -> tags.setContainerFormat(tagList.getString(key, 0));
-                case TagKeys.COUNTRY -> tags.setCountry(tagList.getString(key, 0));
-                case TagKeys.ENCODER -> tags.setEncoder(tagList.getString(key, 0));
-                case TagKeys.ENCODER_VERSION -> tags.setEncoderVersion(tagList.getString(key, 0));
-                case TagKeys.EXTENDED_COMMENT -> tags.setExtendedComment(tagList.getString(key, 0));
-                case TagKeys.GENRE -> tags.setGenre(tagList.getString(key, 0));
-                case TagKeys.HOMEPAGE -> tags.setHomepage(tagList.getString(key, 0));
-                case TagKeys.NOMINAL_BITRATE -> tags.setNominalBitrate(tagList.getString(key, 0));
-                case TagKeys.ORGANISATION -> tags.setOrganisation(tagList.getString(key, 0));
-                case TagKeys.TITLE -> tags.setTitle(tagList.getString(key, 0));
-                default -> System.out.println("INFO: Unhandled tag key -> " + key);
-            }
-        }
-
-        // Streams stop sending TITLE tag when the previous TITLE tag expires and
-        // there is no replacement yet. We reset the title when this happens.
-        if (!tagList.getTagNames().contains(TagKeys.TITLE)) {
-            tags.setTitle("");
-        }
-    }
-
-    /**
-     * Utility class which contains string constants used as keys by GStreamer to identify tag values.
-     * TODO: consider using Enum with getTag() method.
-     */
-    private static class TagKeys {
-        // Utility class used over EnumMap as the values should never change or require modification at run time
-        private static final String TITLE = "title"; // track title
-        private static final String GENRE = "genre"; // station genre
-        private static final String ORGANISATION = "organization"; // station name
-        private static final String EXTENDED_COMMENT = "extended-comment"; // server details
-        private static final String CHANNEL_MODE = "channel-mode"; // eg joint-stereo
-        //private static final String HAS_CRC = "has-crc";
-        private static final String HOMEPAGE = "homepage"; // station web page
-        private static final String AUDIO_CODEC = "audio-codec";
-        private static final String ENCODER = "encoder";
-        private static final String ENCODER_VERSION = "encoder_version";
-        private static final String NOMINAL_BITRATE = "nominal-bitrate";
-        private static final String BITRATE = "bitrate";
-        //private static final String MINIMUM_BITRATE = "minimum-bitrate";
-        //private static final String MAXIMUM_BITRATE = "maximum-bitrate";
-        private static final String CONTAINER_FORMAT = "container-format";
-        private static final String COUNTRY = "geo-location-country";
-        private static final String CITY = "geo-location-city";
-
     }
 }

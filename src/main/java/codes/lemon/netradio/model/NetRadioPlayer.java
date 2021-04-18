@@ -94,10 +94,11 @@ public class NetRadioPlayer implements RadioPlayer{
     @Override
     public void setVolume(int volumeLevel) {
         if (volumeLevel < MIN_VOLUME || volumeLevel > MAX_VOLUME) {
-            throw new IllegalArgumentException("volumeLevel out of range");
+            throw new IllegalArgumentException("volume must be in the range " +
+                    MIN_VOLUME + " to " + MAX_VOLUME +
+                    "(inclusive)");
         }
-        // StreamPlayer has a volume range of 0.0 to 1.0
-        playback.setVolume(volumeLevel/100.0);
+        playback.setVolume(volumeLevel);
         volume = volumeLevel;
     }
 

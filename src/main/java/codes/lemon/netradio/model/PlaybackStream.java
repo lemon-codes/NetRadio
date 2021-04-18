@@ -11,10 +11,14 @@ import java.util.Objects;
  * Live tag updates provided by the audio source can be monitored through ObservableMetadata.
  * This implementation makes use of the Gstreamer library for audio processing.
  */
-public class PlaybackStream extends AbstractStream implements Playback {
+class PlaybackStream extends AbstractStream implements Playback {
 
     public PlaybackStream(URI source) {
         super(Objects.requireNonNull(source));
+    }
+
+    public PlaybackStream(URI source, ObservableMetadata tags) {
+        super(Objects.requireNonNull(source), Objects.requireNonNull(tags));
 
     }
     /**
@@ -25,7 +29,7 @@ public class PlaybackStream extends AbstractStream implements Playback {
      */
     @Override
     PlayBin getPlayBin() {
-        return null;
+        return PlayBinFactory.buildPlaybackPlayBin();
     }
 
     /**

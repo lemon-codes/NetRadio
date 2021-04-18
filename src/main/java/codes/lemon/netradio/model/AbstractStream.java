@@ -14,11 +14,21 @@ import java.net.URI;
  * Classes which extend this abstract class may supply their own customised PlayBin instance.
  */
 abstract class AbstractStream {
-    protected PlayBin stream = getPlayBin();
-    protected ObservableMetadata tags = new ObservableMetadata();
+    protected final PlayBin stream = getPlayBin();
+    protected final ObservableMetadata tags;
 
     public AbstractStream(URI source) {
+        tags = new ObservableMetadata();
         stream.setURI(source);
+        tags.setStreamUri(source.toASCIIString());
+        connectBusListeners(stream);
+    }
+
+    public AbstractStream(URI source, ObservableMetadata tags) {
+        this.tags = tags;
+        stream.setURI(source);
+        tags.setStreamUri(source.toASCIIString());
+        connectBusListeners(stream);
     }
 
     /**

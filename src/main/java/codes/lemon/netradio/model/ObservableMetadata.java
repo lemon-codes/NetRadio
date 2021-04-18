@@ -65,6 +65,14 @@ public class ObservableMetadata implements java.io.Serializable {
     }
 
     /**
+     * Returns all property change listeners registered with this instance
+     * @return all registered property change listeners for this instance
+     */
+    public PropertyChangeListener[] getPropertyChangeListeners() {
+        return pcs.getPropertyChangeListeners();
+    }
+
+    /**
      * Unregister a previously registered PropertyChangeListener. The removed PropertyChangeListener
      * will no longer be notified when property values are updated.
      * @param pcl a property change listener that was previously registered with this instance
