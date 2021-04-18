@@ -15,7 +15,9 @@ import java.net.URI;
  * broadcast by the audio source and the desired output type.
  */
 class PlayBinFactory {
-    public enum RECORDING_FILE_TYPE { MP3, FLAC, AAC_MKV, VORBIS_OGG, OPUS_OGG }
+    //public enum AUDIO_FORMAT { MP3, FLAC, AAC_MKV, VORBIS_OGG, OPUS_OGG }
+    // TODO: implement support for other formats
+    public enum AUDIO_FORMAT { MP3 }
 
     /**
      * Builds a pipeline which can decode the provided audio source.
@@ -25,6 +27,7 @@ class PlayBinFactory {
      * @return a PlayBin capable of decoding the supplied audio source
      */
     public static PlayBin buildPlaybackPlayBin(URI source) {
+        // always check if Gstreamer is initialised since other components could uninitialise
         if (!Gst.isInitialized()) {
             Gst.init();
             System.out.println("Gst initialised");
@@ -37,21 +40,43 @@ class PlayBinFactory {
     /**
      * Builds a pipeline which can decode the provided audio source.
      * Once decoded/processed this pipeline encodes the audio audio data to
-     * match the requested file type before writing the data to disk using
+     * match the requested audio format before writing the data to disk using
      * the provided file name.
      * @param source audio source
      * @param fileName name of output file
-     * @param fileType format to store
+     * @param fileType audio format of output file
      * @return
      */
-    public static PlayBin buildRecordingPlayBin(URI source, File fileName, RECORDING_FILE_TYPE fileType) {
+    public static PlayBin buildRecordingPlayBin(URI source, File fileName, AUDIO_FORMAT fileType) {
+        // always check if Gstreamer is initialised since other components could uninitialise
         if (!Gst.isInitialized()) {
             Gst.init();
             System.out.println("Gst initialised");
         }
         // TODO: implement recording
         return new PlayBin("Recording");
+    }
 
+    /**
+     * Builds a pipeline which can decode the provided audio source.
+     * Once decoded/processed this pipeline will branch and duplicate the
+     * audio data. One branch feeds the data into the systems sound card
+     * for live audio playback. The other branch encodes the audio data
+     * in the requested audio format and writes it to disk under the given
+     * file name.
+     * @param source audio source
+     * @param fileName name of output file
+     * @param fileType format of output file
+     * @return
+     */
+    public static PlayBin buildRecordingPlaybackPlayBin(URI source, File fileName, AUDIO_FORMAT fileType) {
+        // always check if Gstreamer is initialised since other components could uninitialise
+        if (!Gst.isInitialized()) {
+            Gst.init();
+            System.out.println("Gst initialised");
+        }
+        // TODO: implement recording
+        return new PlayBin("Recording");
     }
 
 }
