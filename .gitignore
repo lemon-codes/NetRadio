@@ -33,3 +33,10 @@ javadoc/
 
 # JavaFX
 target/
+
+# Media formats
+*.mp3
+*.ogg
+*.aac
+*.mkv
+*.flac

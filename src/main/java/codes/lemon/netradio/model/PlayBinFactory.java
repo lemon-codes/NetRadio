@@ -17,24 +17,21 @@ import java.net.URI;
 class PlayBinFactory {
     //public enum AUDIO_FORMAT { MP3, FLAC, AAC_MKV, VORBIS_OGG, OPUS_OGG }
     // TODO: implement support for other formats
-    public enum AUDIO_FORMAT { MP3 }
+    //public enum AUDIO_FORMAT { MP3 }
 
     /**
      * Builds a pipeline which can decode the provided audio source.
      * Once decoded/processed this pipeline sends the audio data to the systems
      * soundcard for live playback.
-     * @param source audio source
      * @return a PlayBin capable of decoding the supplied audio source
      */
-    public static PlayBin buildPlaybackPlayBin(URI source) {
+    public static PlayBin buildPlaybackPlayBin() {
         // always check if Gstreamer is initialised since other components could uninitialise
         if (!Gst.isInitialized()) {
             Gst.init();
             System.out.println("Gst initialised");
         }
-        PlayBin pb = new PlayBin("Playback");
-        pb.setURI(source);
-        return pb;
+        return new PlayBin("Playback");
     }
 
     /**
@@ -42,12 +39,11 @@ class PlayBinFactory {
      * Once decoded/processed this pipeline encodes the audio audio data to
      * match the requested audio format before writing the data to disk using
      * the provided file name.
-     * @param source audio source
      * @param fileName name of output file
-     * @param fileType audio format of output file
+     * @param fileFormat audio format of output file
      * @return a PlayBin which stores the audio on disk.
      */
-    public static PlayBin buildRecordingPlayBin(URI source, File fileName, AUDIO_FORMAT fileType) {
+    public static PlayBin buildRecordingPlayBin(File fileName, AudioFormat fileFormat) {
         // always check if Gstreamer is initialised since other components could uninitialise
         if (!Gst.isInitialized()) {
             Gst.init();
@@ -55,8 +51,7 @@ class PlayBinFactory {
         }
 
         PlayBin pb = new PlayBin("Recording");
-        pb.setURI(source);
-        switch (fileType) {
+        switch (fileFormat) {
             case MP3 -> pb.setAudioSink(buildMP3DiskSink());
         }
         return pb;
@@ -110,12 +105,11 @@ class PlayBinFactory {
      * for live audio playback. The other branch encodes the audio data
      * in the requested audio format and writes it to disk under the given
      * file name.
-     * @param source audio source
      * @param fileName name of output file
-     * @param fileType format of output file
+     * @param fileFormat format of output file
      * @return a PlayBin which simultaneously plays audio while storing the audio on disk
      */
-    public static PlayBin buildRecordingPlaybackPlayBin(URI source, File fileName, AUDIO_FORMAT fileType) {
+    public static PlayBin buildRecordingPlaybackPlayBin(File fileName, AudioFormat fileFormat) {
         // always check if Gstreamer is initialised since other components could uninitialise
         if (!Gst.isInitialized()) {
             Gst.init();
@@ -123,8 +117,7 @@ class PlayBinFactory {
         }
         // TODO: implement recording
         PlayBin pb = new PlayBin("Recording");
-        pb.setURI(source);
-        switch(fileType) {
+        switch(fileFormat) {
             case MP3 -> pb.setAudioSink(buildMP3AudioDiskSink());
         }
         return pb;
