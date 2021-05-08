@@ -2,6 +2,9 @@ package codes.lemon.netradio.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 
@@ -222,10 +225,47 @@ public class NetRadioPlayer implements RadioPlayer{
     }
 
     /**
+     * Initiate the recording of a station. Audio is written to the provided
+     * output file. Currently only supports mp3.
+     * The recording can be controlled and observed via the Recording instance
+     * returned by this method.
+     * @param stationId id of the station to be recorded
+     * @param outputFile output destination. (must be mp3 file)
+     * @return Recording instance which supports controlling and observing the recording.
+     */
+    public Recording startRecording(int stationId, File outputFile) {
+        Objects.requireNonNull(outputFile);
+        Station s = stations.getStation(stationId);
+        // TODO: station will return URI instance
+        URI source = null;
+        try {
+            source = new URI(s.getUri());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return new RecordingStream(source, outputFile, AudioFormat.MP3);
+    }
+
+    /**
      * Finishes up and frees resources
      */
+    @Override
     public void shutdown() {
         stop();
         stations.shutdown();
+    }
+}
+
+class Test {
+    public static void main(String[] args) throws InterruptedException {
+        NetRadioPlayer radio = new NetRadioPlayer();
+        File clyde1out = new File("./clyde1.mp3");
+        Recording clyde1 = radio.startRecording(0, clyde1out);
+
+        File capitalOut = new File("./capital.mp3");
+        Recording capital = radio.startRecording(1, capitalOut);
+        Thread.sleep(100000);
+        clyde1.stop();
+        capital.stop();
     }
 }

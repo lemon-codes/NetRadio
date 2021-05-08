@@ -7,42 +7,45 @@ import org.freedesktop.gstreamer.TagList;
 import org.freedesktop.gstreamer.elements.PlayBin;
 
 import java.net.URI;
+import java.util.Objects;
 
 /**
- * This class supports basic stream functionality and takes care of asynchronous tag
+ * This class wraps a gstreamer PlayBin instance and takes care of asynchronous tag
  * updates by encapsulating that functionality in a PropertyChangeListener.
+ * This class supports basic gstreamer stream functionality.
  * Classes which extend this abstract class may supply their own customised PlayBin instance.
  */
-abstract class AbstractStream {
-    protected final PlayBin stream = getPlayBin();
+class GStreamerStream {
+    public static final double MIN_VOLUME = 0.0;
+    public static final double MAX_VOLUME = 1.0;
+    protected final PlayBin source;
     protected final ObservableMetadata tags;
 
-    public AbstractStream(URI source) {
+    public GStreamerStream(PlayBin source) {
+        // TODO: consider accepting URI and setting URI tag in metadata
         tags = new ObservableMetadata();
-        stream.setURI(source);
-        tags.setStreamUri(source.toASCIIString());
-        connectBusListeners(stream);
+        this.source = Objects.requireNonNull(source);
+        connectBusListeners(this.source);
     }
 
-    public AbstractStream(URI source, ObservableMetadata tags) {
-        this.tags = tags;
-        stream.setURI(source);
-        tags.setStreamUri(source.toASCIIString());
-        connectBusListeners(stream);
+    public GStreamerStream(PlayBin source, ObservableMetadata tags) {
+        this.tags = Objects.requireNonNull(tags);
+        this.source = Objects.requireNonNull(source);
+        connectBusListeners(this.source);
     }
 
     /**
      * Start the stream
      */
     public void play() {
-        stream.play();
+        source.play();
     }
 
     /**
      * Stop the stream
      */
     public void stop() {
-        stream.stop();
+        source.stop();
     }
 
     /**
@@ -50,16 +53,33 @@ abstract class AbstractStream {
      * @return true if stopped, else false
      */
     public boolean isStopped() {
-        return !stream.isPlaying();
+        return !source.isPlaying();
     }
 
+    /**
+     * Gets the audio playback volume for the stream.
+     *
+     * @return current playback volume level
+     */
+    public double getVolume() {
+        return source.getVolume();
+    }
 
     /**
-     * Allow subclasses to supply PlayBin instances which have been configured
-     * for a subclasses use case
-     * @return a PlayBin instance that is suited to the child-classes use case
+     * Sets the audio playback volume for the stream.
+     * Volume must be between(inclusive) MIN_VOLUME
+     * and MAX_VOLUME which at current is 0.0 and 1.0 respectively as
+     * defined by the gstreamer library.
+     * @param volumeLevel Audio playback volume. {@code 0.0 <= volumeLevel <= 1.0}
      */
-    abstract PlayBin getPlayBin();
+    public void setVolume(double volumeLevel) {
+        if (volumeLevel < MIN_VOLUME || volumeLevel > MAX_VOLUME) {
+            throw new IllegalArgumentException("volumeLevel out of range");
+        }
+        // playbin has a volume range of 0.0 to 1.0
+        source.setVolume(volumeLevel);
+    }
+
 
     /**
      * Returns an ObservableMetadata instance which contains stream metadata properties.

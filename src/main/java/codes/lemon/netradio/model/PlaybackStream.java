@@ -11,25 +11,61 @@ import java.util.Objects;
  * Live tag updates provided by the audio source can be monitored through ObservableMetadata.
  * This implementation makes use of the Gstreamer library for audio processing.
  */
-class PlaybackStream extends AbstractStream implements Playback {
+class PlaybackStream implements Playback {
+    private final GStreamerStream stream;
 
     public PlaybackStream(URI source) {
-        super(Objects.requireNonNull(source));
+        Objects.requireNonNull(source);
+
+        // construct a playbin capable of playing audio through the systems sound card
+        PlayBin playBin = PlayBinFactory.buildPlaybackPlayBin();
+        playBin.setURI(source);
+
+        // GStreamerStream encapsulates metadata tag functionality
+        stream = new GStreamerStream(playBin);
+        // manually set URI in metadata to ensure it matches the source URI
+        stream.getObservableMetadata().setStreamUri(source.toASCIIString());
     }
 
     public PlaybackStream(URI source, ObservableMetadata tags) {
-        super(Objects.requireNonNull(source), Objects.requireNonNull(tags));
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(tags);
+
+        // construct a playbin capable of playing audio through the systems sound card
+        PlayBin playBin = PlayBinFactory.buildPlaybackPlayBin();
+        playBin.setURI(source);
+
+        // GStreamerStream encapsulates metadata tag functionality. NOTE custom tags supplied
+        stream = new GStreamerStream(playBin, tags);
+        // manually set URI in metadata to ensure it matches the source URI
+        stream.getObservableMetadata().setStreamUri(source.toASCIIString());
 
     }
+
     /**
-     * Allow subclasses to supply PlayBin instances which have been configured
-     * for a subclasses use case
-     *
-     * @return a PlayBin instance that is suited to the child-classes use case
+     * Start playback
      */
     @Override
-    PlayBin getPlayBin() {
-        return PlayBinFactory.buildPlaybackPlayBin();
+    public void play() {
+        stream.play();
+    }
+
+    /**
+     * Stop playback
+     */
+    @Override
+    public void stop() {
+        stream.stop();
+    }
+
+    /**
+     * Check if playback has been stopped.
+     *
+     * @return true if stopped, else false
+     */
+    @Override
+    public boolean isStopped() {
+        return stream.isStopped();
     }
 
     /**
@@ -56,5 +92,16 @@ class PlaybackStream extends AbstractStream implements Playback {
         }
         // playbin has a volume range of 0.0 to 1.0
         stream.setVolume(volumeLevel/100.0);
+    }
+
+    /**
+     * Return an ObservableMetedata instance which can be used by clients
+     * to receive tag updates broadcast by the audio source.
+     *
+     * @return ObservableMetadata instance which receives tag updates from the audio source
+     */
+    @Override
+    public ObservableMetadata getObservableMetadata() {
+        return stream.getObservableMetadata();
     }
 }

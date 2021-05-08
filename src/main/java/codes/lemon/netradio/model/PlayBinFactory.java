@@ -5,6 +5,7 @@ import org.freedesktop.gstreamer.elements.PlayBin;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Objects;
 
 /**
  * This Factory may be used to obtain custom PlayBin pipelines containing elements
@@ -44,6 +45,8 @@ class PlayBinFactory {
      * @return a PlayBin which stores the audio on disk.
      */
     public static PlayBin buildRecordingPlayBin(File fileName, AudioFormat fileFormat) {
+        Objects.requireNonNull(fileName);
+        Objects.requireNonNull(fileFormat);
         // always check if Gstreamer is initialised since other components could uninitialise
         if (!Gst.isInitialized()) {
             Gst.init();
@@ -52,7 +55,7 @@ class PlayBinFactory {
 
         PlayBin pb = new PlayBin("Recording");
         switch (fileFormat) {
-            case MP3 -> pb.setAudioSink(buildMP3DiskSink());
+            case MP3 -> pb.setAudioSink(buildMP3DiskSink(fileName));
         }
         return pb;
     }
@@ -64,7 +67,7 @@ class PlayBinFactory {
      * // TODO: works perfectly
      * @return an audio sink which writes data to disk in mp3 format
      */
-    private static Bin buildMP3DiskSink() {
+    private static Bin buildMP3DiskSink(File fileName) {
         /*
            source -> playbin -> queue -> audioconvert -> lamemp3enc -> id3v2mux -> fileSink
          */
@@ -78,7 +81,7 @@ class PlayBinFactory {
         Element diskSink = ElementFactory.make("filesink", "diskSink");
 
         // TODO: use client supplied out file
-        diskSink.set("location", "./output.mp3");
+        diskSink.set("location", fileName.getAbsolutePath());
 
         multipleAudioSinkBin.add(diskQueue);
         multipleAudioSinkBin.add(audioConverter);
@@ -118,7 +121,7 @@ class PlayBinFactory {
         // TODO: implement recording
         PlayBin pb = new PlayBin("Recording");
         switch(fileFormat) {
-            case MP3 -> pb.setAudioSink(buildMP3AudioDiskSink());
+            case MP3 -> pb.setAudioSink(buildMP3AudioDiskSink(fileName));
         }
         return pb;
     }
@@ -132,7 +135,7 @@ class PlayBinFactory {
      * @return an audio sink which simultaneously passes data to the sound card for
      *          live playback and stores a copy of the audio on disk in mp3 format
      */
-    private static Bin buildMP3AudioDiskSink() {
+    private static Bin buildMP3AudioDiskSink(File fileName) {
         /*
                                     |-> queue -> autoaudiosink
            source -> playbin -> tee-|
@@ -151,7 +154,7 @@ class PlayBinFactory {
         // Adds an ID3v2 header to the beginning of MP3 files using taglib
         Element mp3MetadataFormatter = ElementFactory.make("id3v2mux", "mp3MetadataFormatter");
         Element diskSink = ElementFactory.make("filesink", "diskSink");
-        diskSink.set("location", "./output.mp3");
+        diskSink.set("location", fileName.getAbsolutePath());
 
         multipleAudioSinkBin.add(tee);
         multipleAudioSinkBin.add(playbackQueue);
