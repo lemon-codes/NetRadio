@@ -233,6 +233,7 @@ public class NetRadioPlayer implements RadioPlayer{
      * @param outputFile output destination. (must be mp3 file)
      * @return Recording instance which supports controlling and observing the recording.
      */
+    @Override
     public Recording startRecording(int stationId, File outputFile) {
         Objects.requireNonNull(outputFile);
         Station s = stations.getStation(stationId);

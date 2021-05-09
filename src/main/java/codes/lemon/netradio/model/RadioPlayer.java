@@ -1,5 +1,6 @@
 package codes.lemon.netradio.model;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -112,6 +113,17 @@ public interface RadioPlayer {
      * @return an ObservableTag instance which contains up to data stream metadata.
      */
     ObservableMetadata getObservableMetadata();
+
+    /**
+     * Initiate the recording of a station. Audio is written to the provided
+     * output file.
+     * The recording can be controlled and observed via the Recording instance
+     * returned by this method.
+     * @param stationId id of the station to be recorded
+     * @param outputFile output destination. (must be mp3 file)
+     * @return Recording instance which supports controlling and observing the recording.
+     */
+    Recording startRecording(int stationId, File outputFile);
 
     /**
      * Finishes up and frees resources.
