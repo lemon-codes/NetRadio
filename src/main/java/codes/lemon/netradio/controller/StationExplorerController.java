@@ -60,6 +60,7 @@ public class StationExplorerController implements Initializable, ModelEventHandl
         allStationsTable.getItems().setAll(stationToStationData(model.getAllStations()));
         favouriteStationsTable.getItems().setAll(stationToStationData(getFavouriteStations()));
         mostPlayedStationsTable.getItems().setAll(stationToStationData(getMostPlayedStations(10)));
+        searchResultStationsTable.getItems().setAll(stationToStationData(model.getSearchResults()));
     }
 
 

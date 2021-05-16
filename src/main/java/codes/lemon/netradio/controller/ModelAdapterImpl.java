@@ -167,6 +167,9 @@ class ModelAdapterImpl implements ModelAdapter{
     public boolean removeStation(int id) {
         boolean removed = model.removeStation(id);
         if (removed) {
+            // also remove from search results if present
+            searchResults.removeIf(station -> station.getStationID() == id);
+            // notify subscribers
             notifySubscribers(ModelEvent.STATION_REMOVED);
         }
         return removed;
